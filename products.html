@@ -93,11 +93,16 @@
     </div>
   </section>
 
+  <dialog id="product-details" aria-labelledby="product-details-title" class="w-[min(92vw,760px)] max-w-none rounded-2xl p-0 shadow-2xl backdrop:bg-black/60">
+    <div id="product-details-content"></div>
+  </dialog>
+
   <!-- FOOTER -->
   <footer class="bg-deepEmerald text-white py-12 mt-16 border-t border-classicGold/20">
     <div class="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300 space-y-3">
       <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE ORGANICS</h3>
       <p>&copy; 2026 GreenLife Organics. Handcrafted with Care.</p>
+      <a href="admin.html" class="inline-block pt-2 text-[11px] text-gray-400 underline underline-offset-4 hover:text-classicGold">Store Admin</a>
     </div>
   </footer>
 
@@ -105,11 +110,27 @@
   <!-- JAVASCRIPT FOR PRODUCT CATALOG & CART -->
   <script>
     let allProducts = [];
+    const productDescriptions = {
+      1: 'A reusable clay water bottle for keeping drinking water at home or at work. Its earthy finish makes it a thoughtful everyday alternative to disposable bottles.',
+      2: 'A portable terracotta sipper bottle made for carrying water on commutes, outings, and travel. The traditional clay look brings handcrafted character to your daily routine.',
+      3: 'A terracotta bottle decorated with Warli-inspired artwork. It works as a distinctive drinkware piece and a colourful accent for a dining or display space.',
+      4: 'A traditional mitti jug paired with cups for serving water at home. The set brings an artisanal touch to family meals and relaxed gatherings.',
+      5: 'A clay handi pot for serving curd and yogurt. Its simple handcrafted style makes it a natural fit for everyday meals and traditional table settings.',
+      6: 'A terracotta water dispenser with a tap for convenient serving at home. Its generous form suits dining areas, kitchens, and get-togethers.',
+      7: 'A pack of four bamboo toothbrushes for a simple, everyday oral-care routine. A handy set for households looking to reduce disposable plastic bathroom items.',
+      8: 'A neem and bamboo comb set for everyday grooming. The natural materials and compact design make it easy to keep at home or carry while travelling.',
+      9: 'A handwoven bamboo lamp shade that adds warm, natural texture to a room. Pair it with a compatible light fitting to create a soft decorative accent.',
+      10: 'A handcrafted bamboo storage basket for organising household essentials. Its woven look brings practical storage and artisan character to shelves or living spaces.',
+      11: 'A set of six bamboo cooking utensils for everyday kitchen tasks. The lightweight pieces offer a natural-looking alternative to many synthetic utensils.',
+      12: 'A clay cooking handi pot for preparing and serving meals. Its classic shape brings traditional cookware style to the kitchen and dining table.'
+    };
 
     async function loadProductsFromBackend() {
       try {
         allProducts = await apiRequest('/api/products');
         renderProducts(allProducts);
+        const selectedProduct = new URLSearchParams(window.location.search).get('product');
+        if (selectedProduct) showProductDetails(Number(selectedProduct));
       } catch (error) {
         console.error("Backend se data lane me error aayi:", error);
         document.getElementById('product-grid').innerHTML =
@@ -127,26 +148,69 @@
       grid.innerHTML = items.map(p => `
         <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
           <div>
-            <div class="overflow-hidden rounded-xl mb-3 h-56 bg-stone-100 flex items-center justify-center p-3">
+            <button type="button" onclick="showProductDetails(${p.id})" aria-label="View details for ${escapeHtml(p.name)}" class="overflow-hidden rounded-xl mb-3 h-56 w-full bg-stone-100 flex items-center justify-center p-3 cursor-pointer">
               <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="max-h-full max-w-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-            </div>
+            </button>
             <div class="mb-2">
               <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold bg-classicGold/10 px-2.5 py-1 rounded-md">${escapeHtml(p.category)}</span>
             </div>
-            <h3 class="font-serif font-bold text-lg text-deepEmerald mt-1 leading-snug">${escapeHtml(p.name)}</h3>
+            <h3 class="font-serif font-bold text-lg text-deepEmerald mt-1 leading-snug">
+              <button type="button" onclick="showProductDetails(${p.id})" class="text-left hover:text-classicGold focus-visible:underline">${escapeHtml(p.name)}</button>
+            </h3>
           </div>
           <div class="mt-5 border-t border-gray-100 pt-4 flex items-center justify-between">
             <div>
               <span class="text-[10px] text-mutedGray uppercase tracking-wider block">Price</span>
               <span class="text-lg font-bold text-deepEmerald">₹${p.price}</span>
             </div>
-            <button onclick="addToCart(${p.id})" class="bg-deepEmerald hover:bg-classicGold text-white text-xs px-4 py-2.5 rounded-lg font-semibold tracking-wider transition-colors flex items-center gap-2 shadow-sm">
-              <i class="fa-solid fa-cart-plus"></i> Add
-            </button>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="showProductDetails(${p.id})" class="rounded-lg border border-deepEmerald px-3 py-2.5 text-xs font-semibold text-deepEmerald transition-colors hover:bg-champagne">View details</button>
+              <button type="button" onclick="addToCart(${p.id})" class="bg-deepEmerald hover:bg-classicGold text-white text-xs px-4 py-2.5 rounded-lg font-semibold tracking-wider transition-colors flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-cart-plus"></i> Add
+              </button>
+            </div>
           </div>
         </div>
       `).join('');
     }
+
+    function showProductDetails(id) {
+      const product = allProducts.find(item => item.id === id);
+      if (!product) {
+        alert('Product nahi mila. Collection refresh karke dobara try karein.');
+        return;
+      }
+      const description = product.description?.trim() || productDescriptions[product.id] ||
+        `A handmade ${product.category} product, selected for its practical everyday use and natural character. Contact us if you need more information before ordering.`;
+      document.getElementById('product-details-content').innerHTML = `
+        <div class="grid sm:grid-cols-2">
+          <div class="flex min-h-72 items-center justify-center bg-stone-100 p-6">
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="max-h-80 max-w-full rounded-xl object-contain" />
+          </div>
+          <div class="p-6 sm:p-8">
+            <div class="flex items-start justify-between gap-4">
+              <span class="rounded-md bg-classicGold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-classicGold">${escapeHtml(product.category)}</span>
+              <button type="button" onclick="closeProductDetails()" aria-label="Close product details" class="text-2xl leading-none text-gray-500 hover:text-deepEmerald">&times;</button>
+            </div>
+            <h2 id="product-details-title" class="mt-4 font-serif text-3xl font-bold text-deepEmerald">${escapeHtml(product.name)}</h2>
+            <p class="mt-4 text-sm leading-relaxed text-gray-600">${escapeHtml(description)}</p>
+            <p class="mt-5 text-2xl font-bold text-deepEmerald">₹${Number(product.price).toLocaleString('en-IN')}</p>
+            <button type="button" onclick="addToCart(${product.id}); closeProductDetails();" class="mt-6 w-full rounded-xl bg-deepEmerald px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-classicGold">
+              <i class="fa-solid fa-cart-plus mr-2"></i>Add to bag
+            </button>
+          </div>
+        </div>
+      `;
+      document.getElementById('product-details').showModal();
+    }
+
+    function closeProductDetails() {
+      document.getElementById('product-details').close();
+    }
+
+    document.getElementById('product-details').addEventListener('click', event => {
+      if (event.target === event.currentTarget) closeProductDetails();
+    });
 
     function filterProducts(cat, event) {
       document.querySelectorAll('.filter-btn').forEach(btn => {

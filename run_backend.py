@@ -2,11 +2,28 @@ import getpass
 import os
 import threading
 import webbrowser
+from pathlib import Path
 
 import uvicorn
 
 
+def load_local_environment() -> None:
+    env_path = Path(__file__).resolve().parent / ".env"
+    if not env_path.is_file():
+        return
+    for line in env_path.read_text(encoding="utf-8-sig").splitlines():
+        key, separator, value = line.partition("=")
+        key = key.strip()
+        if not separator or not key or key.startswith("#"):
+            continue
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        os.environ.setdefault(key, value)
+
+
 def main() -> None:
+    load_local_environment()
     print("Set an admin password to start the GreenLife website.")
     print("For security, password keystrokes are hidden while you type.")
     while True:

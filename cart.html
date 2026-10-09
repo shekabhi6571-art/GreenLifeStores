@@ -366,6 +366,13 @@
         return;
       }
 
+      const customerName = document.getElementById('checkout-name').value.trim();
+      const phone = document.getElementById('checkout-phone').value.trim();
+      if (customerName.length < 2 || phone.length < 8) {
+        alert("Aapke account ki naam ya phone details load nahi hui. Page refresh karke dobara try karein.");
+        return;
+      }
+
       try {
         const order = await apiRequest('/api/orders', {
           method: 'POST',

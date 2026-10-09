@@ -12,6 +12,9 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Generator, Literal
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import Request as UrlRequest, urlopen
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import FileResponse
@@ -28,7 +31,9 @@ ADMIN_SESSION_COOKIE = "greenlife_admin_session"
 ADMIN_SESSION_SECONDS = 8 * 60 * 60
 CUSTOMER_SESSION_COOKIE = "greenlife_customer_session"
 CUSTOMER_SESSION_SECONDS = 30 * 24 * 60 * 60
-OTP_MODE = os.environ.get("GREENLIFE_OTP_MODE", "demo").lower()
+MSG91_AUTH_KEY = os.environ.get("GREENLIFE_MSG91_AUTH_KEY", "")
+MSG91_TEMPLATE_ID = os.environ.get("GREENLIFE_MSG91_TEMPLATE_ID", "")
+MSG91_OTP_URL = "https://control.msg91.com/api/v5/otp"
 
 DEFAULT_PRODUCTS = [
     {"id": 1, "name": "Organic Clay Water Bottle", "price": 599, "image": "images/clay-bottle-1.jpg", "category": "soil"},
@@ -53,10 +58,15 @@ class ProductInput(BaseModel):
     price: float = Field(gt=0)
     image: str = Field(min_length=1, max_length=500)
     category: str = Field(min_length=1, max_length=50)
+    description: str = Field(default="", max_length=2000)
 
 
 class Product(ProductInput):
     id: int
+
+
+class AdminProductInput(ProductInput):
+    image_data: str | None = Field(default=None, max_length=2_800_000)
 
 
 class ProductSubmissionInput(BaseModel):
@@ -155,6 +165,44 @@ def otp_digest(phone: str, otp: str) -> str:
     return hmac.new(
         SESSION_SECRET, f"customer-otp:{phone}:{otp}".encode("utf-8"), "sha256"
     ).hexdigest()
+
+
+def send_customer_otp(phone: str, otp: str) -> None:
+    if not MSG91_AUTH_KEY or not MSG91_TEMPLATE_ID:
+        raise HTTPException(
+            status_code=503,
+            detail="SMS OTP is not configured yet. Add your MSG91 Auth Key and approved OTP Template ID to .env, then restart the server.",
+        )
+    query = urlencode(
+        {
+            "authkey": MSG91_AUTH_KEY,
+            "template_id": MSG91_TEMPLATE_ID,
+            "mobile": phone,
+            "otp": otp,
+            "otp_length": "6",
+            "otp_expiry": "10",
+        }
+    )
+    request = UrlRequest(f"{MSG91_OTP_URL}?{query}", method="GET")
+    try:
+        with urlopen(request, timeout=10) as response:
+            result = json.loads(response.read())
+    except HTTPError as error:
+        error.close()
+        raise HTTPException(
+            status_code=502,
+            detail="MSG91 could not send the OTP. Check your Auth Key, template approval, and MSG91 account balance.",
+        ) from None
+    except (URLError, TimeoutError, json.JSONDecodeError) as error:
+        raise HTTPException(
+            status_code=502,
+            detail="Could not reach MSG91 to send the OTP. Check your internet connection and try again.",
+        ) from error
+    if not isinstance(result, dict) or result.get("type") != "success":
+        raise HTTPException(
+            status_code=502,
+            detail="MSG91 did not accept the OTP request. Check your OTP template and account settings.",
+        )
 
 
 def create_customer_session(customer_id: int) -> str:
@@ -283,10 +331,18 @@ def initialize_database() -> None:
                 name TEXT NOT NULL,
                 price REAL NOT NULL CHECK(price > 0),
                 image TEXT NOT NULL,
-                category TEXT NOT NULL
+                category TEXT NOT NULL,
+                description TEXT NOT NULL DEFAULT ''
             )
             """
         )
+        product_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(products)")
+        }
+        if "description" not in product_columns:
+            connection.execute(
+                "ALTER TABLE products ADD COLUMN description TEXT NOT NULL DEFAULT ''"
+            )
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS orders (
@@ -390,6 +446,49 @@ def product_from_row(row: sqlite3.Row) -> Product:
     return Product(**dict(row))
 
 
+def save_product_image(encoded_image: str) -> str:
+    image_match = re.fullmatch(
+        r"data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})",
+        encoded_image,
+    )
+    if image_match is None:
+        raise HTTPException(
+            status_code=422, detail="Upload a PNG, JPG, or WebP product image."
+        )
+    image_format, encoded_bytes = image_match.groups()
+    try:
+        image_bytes = base64.b64decode(encoded_bytes, validate=True)
+    except binascii.Error as error:
+        raise HTTPException(status_code=422, detail="Product image is invalid.") from error
+    if not image_bytes or len(image_bytes) > 2 * 1024 * 1024:
+        raise HTTPException(
+            status_code=413, detail="Product image must be smaller than 2 MB."
+        )
+    valid_signature = (
+        image_format == "png" and image_bytes.startswith(b"\x89PNG\r\n\x1a\n")
+    ) or (
+        image_format == "jpeg" and image_bytes.startswith(b"\xff\xd8\xff")
+    ) or (
+        image_format == "webp"
+        and image_bytes.startswith(b"RIFF")
+        and image_bytes[8:12] == b"WEBP"
+    )
+    if not valid_signature:
+        raise HTTPException(status_code=422, detail="Image type does not match its data.")
+
+    extension = "jpg" if image_format == "jpeg" else image_format
+    filename = f"{secrets.token_hex(16)}.{extension}"
+    image_path = SELLER_UPLOAD_DIR / filename
+    SELLER_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        image_path.write_bytes(image_bytes)
+    except OSError as error:
+        raise HTTPException(
+            status_code=500, detail="Could not save the product image."
+        ) from error
+    return f"images/seller-submissions/{filename}"
+
+
 def order_from_row(row: sqlite3.Row) -> dict:
     order = dict(row)
     order["items"] = json.loads(order.pop("items_json"))
@@ -436,11 +535,6 @@ def admin_session(request: Request) -> dict[str, bool]:
 
 @app.post("/api/customer/register", status_code=202)
 def customer_register(registration: CustomerRegistrationInput) -> dict:
-    if OTP_MODE != "demo":
-        raise HTTPException(
-            status_code=503,
-            detail="SMS OTP is not configured. The demo mode does not send real SMS.",
-        )
     phone = normalize_phone(registration.phone)
     email = normalize_gmail(registration.email)
     now = int(time.time())
@@ -483,6 +577,7 @@ def customer_register(registration: CustomerRegistrationInput) -> dict:
             sends_in_window = 1
             window_started_at = now
 
+        send_customer_otp(phone, otp)
         values = (
             registration.name.strip(),
             email,
@@ -517,9 +612,8 @@ def customer_register(registration: CustomerRegistrationInput) -> dict:
             values,
         )
     return {
-        "status": "demo_code_created",
-        "message": "Demo only: no SMS was sent and this code does not verify phone ownership.",
-        "demo_otp": otp,
+        "status": "otp_sent",
+        "message": "A verification code was sent to your phone number.",
         "expires_in_seconds": 600,
         "resend_after_seconds": 60,
     }
@@ -559,7 +653,7 @@ def customer_verify_otp(
                 INSERT INTO customers (
                     name, email, phone, password_hash, marketing_consent,
                     verification_mode, created_at
-                ) VALUES (?, ?, ?, ?, ?, 'demo', ?)
+                ) VALUES (?, ?, ?, ?, ?, 'msg91', ?)
                 """,
                 (
                     pending["name"],
@@ -576,10 +670,10 @@ def customer_verify_otp(
             )
     if failure_status == 429:
         raise HTTPException(
-            status_code=429, detail="Too many attempts. Request a new demo code."
+            status_code=429, detail="Too many attempts. Request a new SMS code."
         )
     if failure_status:
-        raise HTTPException(status_code=400, detail="Invalid or expired demo code.")
+        raise HTTPException(status_code=400, detail="Invalid or expired SMS code.")
     set_customer_cookie(response, request, customer_id)
     with database() as connection:
         row = connection.execute(
@@ -694,15 +788,35 @@ def get_products() -> list[Product]:
     status_code=201,
     dependencies=[Depends(require_admin)],
 )
-def add_product(product: ProductInput) -> Product:
-    with database() as connection:
-        cursor = connection.execute(
-            "INSERT INTO products (name, price, image, category) VALUES (?, ?, ?, ?)",
-            (product.name, product.price, product.image, product.category),
-        )
-        row = connection.execute(
-            "SELECT * FROM products WHERE id = ?", (cursor.lastrowid,)
-        ).fetchone()
+def add_product(product: AdminProductInput) -> Product:
+    image = product.image
+    if isinstance(product, AdminProductInput) and product.image_data:
+        image = save_product_image(product.image_data)
+    image_path = BASE_DIR / image if image.startswith("images/seller-submissions/") else None
+    try:
+        with database() as connection:
+            cursor = connection.execute(
+                """
+                INSERT INTO products (name, price, image, category, description)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    product.name,
+                    product.price,
+                    image,
+                    product.category,
+                    product.description,
+                ),
+            )
+            row = connection.execute(
+                "SELECT * FROM products WHERE id = ?", (cursor.lastrowid,)
+            ).fetchone()
+    except sqlite3.Error as error:
+        if image_path is not None:
+            image_path.unlink(missing_ok=True)
+        raise HTTPException(
+            status_code=500, detail="Could not save the product."
+        ) from error
     return product_from_row(row)
 
 
@@ -714,46 +828,8 @@ def submit_product(submission: ProductSubmissionInput) -> dict:
         seller_email,
     ):
         raise HTTPException(status_code=422, detail="Enter a valid email address.")
-    encoded_image = submission.image_data
-    image_match = re.fullmatch(
-        r"data:image/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})",
-        encoded_image,
-    )
-    if image_match is None:
-        raise HTTPException(
-            status_code=422, detail="Upload a PNG, JPG, or WebP product image."
-        )
-    image_format, encoded_bytes = image_match.groups()
-    try:
-        image_bytes = base64.b64decode(encoded_bytes, validate=True)
-    except binascii.Error as error:
-        raise HTTPException(status_code=422, detail="Product image is invalid.") from error
-    if not image_bytes or len(image_bytes) > 2 * 1024 * 1024:
-        raise HTTPException(
-            status_code=413, detail="Product image must be smaller than 2 MB."
-        )
-    valid_signature = (
-        image_format == "png" and image_bytes.startswith(b"\x89PNG\r\n\x1a\n")
-    ) or (
-        image_format == "jpeg" and image_bytes.startswith(b"\xff\xd8\xff")
-    ) or (
-        image_format == "webp"
-        and image_bytes.startswith(b"RIFF")
-        and image_bytes[8:12] == b"WEBP"
-    )
-    if not valid_signature:
-        raise HTTPException(status_code=422, detail="Image type does not match its data.")
-
-    extension = "jpg" if image_format == "jpeg" else image_format
-    filename = f"{secrets.token_hex(16)}.{extension}"
-    image_path = SELLER_UPLOAD_DIR / filename
-    SELLER_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-    try:
-        image_path.write_bytes(image_bytes)
-    except OSError as error:
-        raise HTTPException(
-            status_code=500, detail="Could not save the product image."
-        ) from error
+    image = save_product_image(submission.image_data)
+    image_path = BASE_DIR / image
 
     try:
         with database() as connection:
@@ -770,7 +846,7 @@ def submit_product(submission: ProductSubmissionInput) -> dict:
                     submission.seller_phone.strip(),
                     submission.name.strip(),
                     submission.price,
-                    f"images/seller-submissions/{filename}",
+                    image,
                     submission.category,
                     datetime.now(timezone.utc).isoformat(),
                 ),

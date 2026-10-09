@@ -72,7 +72,7 @@
       <div class="text-center space-y-2">
         <i class="fa-solid fa-lock text-classicGold text-3xl"></i>
         <h2 class="font-serif font-bold text-2xl text-deepEmerald">Admin Sign In</h2>
-        <p class="text-xs text-mutedGray">This area is for authorized store administrators.</p>
+        <p class="text-xs text-mutedGray">Enter the admin password you create when starting the website server. After signing in, use “Add New Product” to publish items to the Shop.</p>
       </div>
       <div class="space-y-2">
         <label for="admin-password" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Admin password</label>
@@ -128,16 +128,19 @@
 
           <div class="space-y-1.5">
             <label class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Price (INR)</label>
-            <input type="number" id="p-price" required placeholder="599" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
+            <input type="number" id="p-price" required min="1" step="0.01" placeholder="599" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
           </div>
 
           <div class="space-y-1.5">
-            <label class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Image Filename / Path</label>
-            <input type="text" id="p-image" required placeholder="images/filename.jpg" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
+            <label for="p-image-file" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Product photo (PNG, JPG, or WebP; up to 2 MB)</label>
+            <input type="file" id="p-image-file" accept="image/png,image/jpeg,image/webp" class="w-full text-xs file:mr-3 file:rounded-lg file:border-0 file:bg-gray-100 file:px-3 file:py-2" />
+            <img id="p-image-preview" alt="Product photo preview" class="hidden max-h-36 rounded-lg border border-gray-100 object-contain" />
+            <label for="p-image" class="block pt-1 text-[10px] text-mutedGray">Or use an existing image path from the images folder</label>
+            <input type="text" id="p-image" placeholder="images/filename.jpg" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
           </div>
 
           <div class="space-y-1.5">
-            <label class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Category</label>
+            <label for="p-category" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Category</label>
             <select id="p-category" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold bg-white">
               <option value="soil">Soil & Clay</option>
               <option value="care">Bamboo Care</option>
@@ -146,6 +149,12 @@
             </select>
           </div>
 
+          <div class="space-y-1.5">
+            <label for="p-description" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Product description</label>
+            <textarea id="p-description" required minlength="20" maxlength="2000" rows="3" placeholder="Describe the product so customers can read it before ordering." class="w-full resize-y text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold"></textarea>
+          </div>
+
+          <p id="product-form-message" role="status" class="hidden rounded-lg p-3 text-xs"></p>
           <button type="submit" class="w-full bg-deepEmerald hover:bg-classicGold text-white text-xs py-3 rounded-xl font-semibold tracking-widest uppercase transition-colors shadow-sm">
             Save Product
           </button>
@@ -228,6 +237,36 @@
   <script src="api.js"></script>
   <!-- ADMIN JAVASCRIPT -->
   <script>
+    let selectedProductImage = '';
+
+    document.getElementById('p-image-file').addEventListener('change', event => {
+      const file = event.target.files[0];
+      const preview = document.getElementById('p-image-preview');
+      selectedProductImage = '';
+      preview.classList.add('hidden');
+      if (!file) return;
+      if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 2 * 1024 * 1024) {
+        event.target.value = '';
+        showProductFormMessage('Choose a PNG, JPG, or WebP image smaller than 2 MB.', true);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        selectedProductImage = String(reader.result);
+        preview.src = selectedProductImage;
+        preview.classList.remove('hidden');
+      };
+      reader.onerror = () => showProductFormMessage('Could not read that image. Please try another file.', true);
+      reader.readAsDataURL(file);
+    });
+
+    function showProductFormMessage(message, isError) {
+      const element = document.getElementById('product-form-message');
+      element.innerText = message;
+      element.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-green-50', 'text-green-700');
+      element.classList.add(isError ? 'bg-red-50' : 'bg-green-50', isError ? 'text-red-700' : 'text-green-700');
+    }
+
     async function showAdminDashboard() {
       document.getElementById('admin-login').classList.add('hidden');
       document.getElementById('admin-dashboard').classList.remove('hidden');
@@ -387,20 +426,30 @@
 
     async function addNewProduct(event) {
       event.preventDefault();
+      const imagePath = document.getElementById('p-image').value.trim();
+      if (!selectedProductImage && !imagePath) {
+        showProductFormMessage('Choose a product photo or enter an existing image path.', true);
+        return;
+      }
       const newProduct = {
         name: document.getElementById('p-name').value.trim(),
         price: Number(document.getElementById('p-price').value),
-        image: document.getElementById('p-image').value.trim(),
-        category: document.getElementById('p-category').value
+        image: imagePath || 'images/admin-product-upload.jpg',
+        image_data: selectedProductImage || null,
+        category: document.getElementById('p-category').value,
+        description: document.getElementById('p-description').value.trim()
       };
 
       try {
         await apiRequest('/api/products', { method: 'POST', body: JSON.stringify(newProduct) });
         document.getElementById('add-product-form').reset();
+        selectedProductImage = '';
+        document.getElementById('p-image-preview').src = '';
+        document.getElementById('p-image-preview').classList.add('hidden');
         await renderAdminPanel();
-        alert("Product saved to the backend inventory.");
+        showProductFormMessage('Product saved and published in the Shop.', false);
       } catch (error) {
-        alert(`Product save nahi hua: ${error.message}`);
+        showProductFormMessage(`Product save nahi hua: ${error.message}`, true);
       }
     }
 
