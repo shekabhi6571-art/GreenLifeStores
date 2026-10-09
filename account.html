@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Account | GreenLife Organics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Plus Jakarta Sans', 'sans-serif'] },
+        colors: { deepEmerald: '#0F2C23', classicGold: '#C5A059', champagne: '#F4EFEA', softBeige: '#FAF8F5' }
+      } }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-softBeige font-sans text-gray-900">
+  <header class="border-b border-gray-100 bg-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <a href="index.html" class="text-deepEmerald">
+        <span class="font-serif text-2xl font-bold tracking-wider">GREENLIFE</span>
+        <span class="ml-2 text-[10px] uppercase tracking-widest text-classicGold">Organics</span>
+      </a>
+      <nav class="flex gap-5 text-xs font-semibold uppercase tracking-wider">
+        <a href="products.html" class="hover:text-classicGold">Shop</a>
+        <a href="cart.html" class="hover:text-classicGold">Bag</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-3xl px-5 py-10">
+    <section id="account-panel" class="mx-auto max-w-xl rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-9">
+      <h1 class="text-center font-serif text-4xl font-bold text-deepEmerald">Your Account</h1>
+      <p class="mt-2 text-center text-sm text-gray-500">Browse the store freely. Sign in or create an account when you are ready to place your COD order.</p>
+
+      <div id="auth-forms" class="mt-7">
+        <div class="mb-6 flex rounded-xl bg-gray-100 p-1">
+          <button id="register-tab" type="button" onclick="showForm('register')" class="w-1/2 rounded-lg bg-deepEmerald py-2 text-xs font-semibold uppercase tracking-wider text-white">Create account</button>
+          <button id="login-tab" type="button" onclick="showForm('login')" class="w-1/2 rounded-lg py-2 text-xs font-semibold uppercase tracking-wider text-gray-600">Sign in</button>
+        </div>
+
+        <form id="register-form" class="space-y-4" onsubmit="requestOtp(event)">
+          <label class="block text-xs font-semibold text-deepEmerald">Full name
+            <input id="register-name" required minlength="2" maxlength="120" autocomplete="name" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <label class="block text-xs font-semibold text-deepEmerald">Gmail address
+            <input id="register-email" required type="email" autocomplete="email" placeholder="you@gmail.com" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <label class="block text-xs font-semibold text-deepEmerald">Phone number
+            <input id="register-phone" required type="tel" minlength="10" maxlength="20" autocomplete="tel" placeholder="+91 98765 43210" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <label class="block text-xs font-semibold text-deepEmerald">Password (at least 10 characters)
+            <input id="register-password" required type="password" minlength="10" maxlength="128" autocomplete="new-password" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <label class="flex items-start gap-2 text-xs leading-relaxed text-gray-600">
+            <input id="marketing-consent" type="checkbox" class="mt-0.5 accent-deepEmerald" />
+            <span>I agree to receive occasional GreenLife product and offer updates. This is optional and can be changed later.</span>
+          </label>
+          <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Create account</button>
+        </form>
+
+        <form id="login-form" class="hidden space-y-4" onsubmit="loginCustomer(event)">
+          <label class="block text-xs font-semibold text-deepEmerald">Gmail or phone number
+            <input id="login-identifier" required autocomplete="username" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <label class="block text-xs font-semibold text-deepEmerald">Password
+            <input id="login-password" required type="password" autocomplete="current-password" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
+          </label>
+          <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Sign in</button>
+        </form>
+
+        <section id="otp-panel" class="mt-5 hidden rounded-xl border border-amber-300 bg-amber-50 p-4">
+          <p class="font-semibold text-amber-950">Demo OTP only — no SMS was sent</p>
+          <p class="mt-1 text-xs leading-relaxed text-amber-900">This free college-project code does not verify ownership of the phone number. Do not use demo mode for a live store.</p>
+          <p id="demo-code" class="my-3 rounded-lg bg-white p-3 text-center font-mono text-2xl font-bold tracking-[0.35em] text-deepEmerald"></p>
+          <form class="space-y-3" onsubmit="verifyOtp(event)">
+            <label class="block text-xs font-semibold text-deepEmerald">Enter the 6-digit demo code
+              <input id="otp-code" required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-center font-mono text-lg tracking-widest" />
+            </label>
+            <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white">Verify demo code</button>
+          </form>
+          <button type="button" onclick="requestOtp(null)" class="mt-3 text-xs font-semibold text-deepEmerald underline">Request another code (60-second cooldown)</button>
+        </section>
+      </div>
+
+      <p id="auth-message" role="status" class="mt-4 hidden rounded-lg bg-red-50 p-3 text-sm text-red-700"></p>
+
+      <section id="customer-area" class="mt-7 hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b pb-4">
+          <div>
+            <h2 id="customer-name" class="font-serif text-2xl font-bold text-deepEmerald"></h2>
+            <p id="customer-details" class="mt-1 text-xs text-gray-500"></p>
+          </div>
+          <button onclick="logoutCustomer()" class="rounded-lg border border-gray-200 px-4 py-2 text-xs font-semibold">Sign out</button>
+        </div>
+        <label class="mt-5 flex items-start gap-2 text-xs leading-relaxed text-gray-600">
+          <input id="saved-marketing-consent" type="checkbox" onchange="saveConsent()" class="mt-0.5 accent-deepEmerald" />
+          <span>Send me occasional product and offer updates (optional).</span>
+        </label>
+        <h3 class="mt-8 border-b pb-2 font-serif text-xl font-bold text-deepEmerald">Your orders</h3>
+        <div id="customer-orders" class="mt-3 space-y-3"></div>
+        <a href="products.html" class="mt-6 inline-block rounded-xl bg-deepEmerald px-5 py-3 text-xs font-semibold uppercase tracking-wider text-white">Browse collection</a>
+      </section>
+    </section>
+  </main>
+
+  <script src="api.js"></script>
+  <script>
+    let pendingPhone = '';
+
+    function showMessage(message, isError = true) {
+      const element = document.getElementById('auth-message');
+      element.innerText = message;
+      element.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-green-50', 'text-green-700');
+      element.classList.add(isError ? 'bg-red-50' : 'bg-green-50', isError ? 'text-red-700' : 'text-green-700');
+    }
+
+    function showForm(form) {
+      document.getElementById('register-form').classList.toggle('hidden', form !== 'register');
+      document.getElementById('login-form').classList.toggle('hidden', form !== 'login');
+      document.getElementById('otp-panel').classList.add('hidden');
+      document.getElementById('register-tab').className = `w-1/2 rounded-lg py-2 text-xs font-semibold uppercase tracking-wider ${form === 'register' ? 'bg-deepEmerald text-white' : 'text-gray-600'}`;
+      document.getElementById('login-tab').className = `w-1/2 rounded-lg py-2 text-xs font-semibold uppercase tracking-wider ${form === 'login' ? 'bg-deepEmerald text-white' : 'text-gray-600'}`;
+      document.getElementById('auth-message').classList.add('hidden');
+    }
+
+    async function requestOtp(event) {
+      if (event) event.preventDefault();
+      try {
+        const result = await apiRequest('/api/customer/register', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: document.getElementById('register-name').value.trim(),
+            email: document.getElementById('register-email').value.trim(),
+            phone: document.getElementById('register-phone').value.trim(),
+            password: document.getElementById('register-password').value,
+            marketing_consent: document.getElementById('marketing-consent').checked
+          })
+        });
+        pendingPhone = document.getElementById('register-phone').value.trim();
+        document.getElementById('demo-code').innerText = result.demo_otp;
+        document.getElementById('otp-panel').classList.remove('hidden');
+        showMessage(result.message, false);
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    async function verifyOtp(event) {
+      event.preventDefault();
+      try {
+        await apiRequest('/api/customer/verify-otp', {
+          method: 'POST',
+          body: JSON.stringify({ phone: pendingPhone, otp: document.getElementById('otp-code').value })
+        });
+        await authenticated();
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    async function loginCustomer(event) {
+      event.preventDefault();
+      try {
+        await apiRequest('/api/customer/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            identifier: document.getElementById('login-identifier').value.trim(),
+            password: document.getElementById('login-password').value
+          })
+        });
+        await authenticated();
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    function redirectAfterLogin() {
+      const next = new URLSearchParams(window.location.search).get('next');
+      if (next === 'cart.html') window.location.assign('cart.html');
+    }
+
+    async function authenticated() {
+      redirectAfterLogin();
+      await loadCustomerAccount();
+    }
+
+    async function loadCustomerAccount() {
+      const session = await apiRequest('/api/customer/session');
+      if (!session.authenticated) return;
+      document.getElementById('auth-forms').classList.add('hidden');
+      document.getElementById('customer-area').classList.remove('hidden');
+      document.getElementById('customer-name').innerText = session.customer.name;
+      document.getElementById('customer-details').innerText = `${session.customer.email} · ${session.customer.phone}`;
+      document.getElementById('saved-marketing-consent').checked = session.customer.marketing_consent;
+      const orders = await apiRequest('/api/customer/orders');
+      document.getElementById('customer-orders').innerHTML = orders.length
+        ? orders.map(order => `<article class="rounded-xl border border-gray-100 p-4 text-sm">
+            <div class="flex justify-between gap-3 font-semibold text-deepEmerald"><span>Order #${order.id}</span><span>₹${order.total} · COD</span></div>
+            <p class="mt-1 text-xs text-gray-500">${escapeHtml(new Date(order.created_at).toLocaleString())} · ${order.items.reduce((sum, item) => sum + item.quantity, 0)} item(s)</p>
+            <p class="mt-1 text-xs text-gray-600">${escapeHtml(order.address)}</p>
+          </article>`).join('')
+        : '<p class="py-5 text-sm text-gray-500">No orders yet. Your future COD orders will appear here.</p>';
+    }
+
+    async function saveConsent() {
+      try {
+        await apiRequest('/api/customer/marketing-consent', {
+          method: 'PATCH',
+          body: JSON.stringify({ marketing_consent: document.getElementById('saved-marketing-consent').checked })
+        });
+        showMessage('Your preference has been saved.', false);
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    async function logoutCustomer() {
+      try {
+        await apiRequest('/api/customer/logout', { method: 'POST' });
+        window.location.reload();
+      } catch (error) {
+        showMessage(error.message);
+      }
+    }
+
+    loadCustomerAccount().catch(error => showMessage(`Could not load account: ${error.message}`));
+  </script>
+</body>
+</html>

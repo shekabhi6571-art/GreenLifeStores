@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | GreenLife Organics</title>
+  
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            deepEmerald: '#0F2C23',
+            classicGold: '#C5A059',
+            champagne: '#F4EFEA',
+            softBeige: '#FAF8F5',
+            mutedGray: '#666666'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-softBeige text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- TOP BANNER -->
+  <div class="bg-deepEmerald text-classicGold text-xs py-2.5 px-4 text-center font-medium tracking-widest uppercase border-b border-classicGold/25">
+    <span>Free Shipping On Orders Above ₹500 &nbsp;&bull;&nbsp; 100% Handcrafted & Plastic-Free Initiative</span>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 border border-classicGold flex items-center justify-center text-classicGold font-serif text-xl rounded-full">
+          G
+        </div>
+        <div>
+          <h1 class="text-2xl font-serif font-bold tracking-wider text-deepEmerald leading-none">GREENLIFE</h1>
+          <p class="text-[9px] uppercase tracking-[0.25em] text-classicGold font-semibold mt-1">Organics & Artisanal Living</p>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-10 font-medium text-xs tracking-widest uppercase text-gray-700">
+        <a href="index.html" class="hover:text-classicGold transition-colors">Home</a>
+        <a href="products.html" class="hover:text-classicGold transition-colors">Shop</a>
+        <a href="about.html" class="text-deepEmerald font-bold border-b border-classicGold pb-1">About Us</a>
+        <a href="contact.html" class="hover:text-classicGold transition-colors">Contact</a>
+      </nav>
+
+      <a href="cart.html" class="relative flex items-center gap-2 text-deepEmerald font-medium text-xs tracking-wider uppercase bg-champagne px-4 py-2.5 rounded-full border border-gray-200">
+        <i class="fa-solid fa-bag-shopping text-classicGold"></i>
+        <span>Bag</span>
+        <span id="cart-count" class="bg-deepEmerald text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="bg-champagne/70 py-20 px-6 text-center border-b border-gray-200/50 relative overflow-hidden">
+    <div class="max-w-3xl mx-auto space-y-4">
+      <span class="text-[10px] uppercase tracking-[0.3em] text-classicGold font-bold bg-white/80 px-4 py-1.5 rounded-full border border-classicGold/30">The GreenLife Manifesto</span>
+      <h2 class="text-4xl sm:text-6xl font-serif text-deepEmerald font-bold leading-tight">Returning to Earth, <br>Reclaiming Our Health</h2>
+      <p class="text-xs sm:text-sm text-mutedGray max-w-2xl mx-auto leading-relaxed">
+        We are on a conscious mission to eliminate single-use plastics from modern households by reviving ancient Indian earthenware and sustainable bamboo craftsmanship.
+      </p>
+    </div>
+  </section>
+
+  <!-- OUR STORY & VISION -->
+  <section class="py-20 px-6 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="space-y-6">
+        <div class="inline-flex items-center gap-2 text-classicGold font-semibold text-xs tracking-widest uppercase">
+          <i class="fa-solid fa-seedling"></i> Rooted in Heritage
+        </div>
+        <h3 class="font-serif font-bold text-3xl sm:text-4xl text-deepEmerald leading-snug">Why Natural Earthenware & Bamboo Matter Today</h3>
+        <p class="text-xs sm:text-sm text-mutedGray leading-relaxed">
+          In an era dominated by synthetic plastics, chemical-coated cookware, and fast consumerism, GreenLife Organics brings a mindful pause. Every terracotta pot, unglazed water bottle, and organic bamboo brush is carefully designed to reconnect you with nature's pure essence.
+        </p>
+        <p class="text-xs sm:text-sm text-mutedGray leading-relaxed">
+          Mitti (terracotta) is naturally alkaline. When water or food interacts with porous clay, it balances pH levels, infuses essential minerals like calcium and magnesium, and keeps contents naturally cool without artificial refrigeration.
+        </p>
+        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+          <div>
+            <h4 class="font-serif font-bold text-2xl text-deepEmerald">100%</h4>
+            <p class="text-xs text-mutedGray mt-1">Biodegradable & Chemical Free</p>
+          </div>
+          <div>
+            <h4 class="font-serif font-bold text-2xl text-deepEmerald">500+</h4>
+            <p class="text-xs text-mutedGray mt-1">Local Artisans Supported</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-4 pt-8">
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <img src="images/Artisan Clay Cooking Handi Pot.jpg" alt="Clay Pot" class="w-full h-48 object-cover rounded-xl" />
+          </div>
+          <div class="bg-deepEmerald text-white p-6 rounded-2xl space-y-2">
+            <i class="fa-solid fa-earth-asia text-classicGold text-xl"></i>
+            <h5 class="font-serif font-bold text-base">Zero Waste Goal</h5>
+            <p class="text-[11px] text-gray-300">From production to doorstep delivery, our footprint is completely eco-friendly.</p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-champagne p-6 rounded-2xl space-y-2 border border-classicGold/20">
+            <i class="fa-solid fa-hands-holding-child text-classicGold text-xl"></i>
+            <h5 class="font-serif font-bold text-base text-deepEmerald">Fair Wages</h5>
+            <p class="text-[11px] text-mutedGray">Empowering rural craftsmen with fair trade pricing and global markets.</p>
+          </div>
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <img src="images/Clay Curd & Yogurt Handi Pot.jpg" alt="Handi" class="w-full h-48 object-cover rounded-xl" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE VALUES / PILLARS -->
+  <section class="bg-white py-20 px-6 border-y border-gray-100">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+        <h3 class="font-serif font-bold text-3xl sm:text-4xl text-deepEmerald">The Four Pillars of GreenLife</h3>
+        <p class="text-xs text-mutedGray">Uncompromising standards that govern every single product we craft and ship.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="bg-softBeige p-8 rounded-2xl border border-gray-100 space-y-4 hover:border-classicGold/40 transition-all">
+          <div class="w-12 h-12 bg-deepEmerald text-classicGold rounded-xl flex items-center justify-center text-lg">
+            <i class="fa-solid fa-flask-vial"></i>
+          </div>
+          <h4 class="font-serif font-bold text-xl text-deepEmerald">Alkaline Wellness</h4>
+          <p class="text-xs text-mutedGray leading-relaxed">Our unglazed porous clay vessels naturally balance body acidity and enrich water with vital earth minerals.</p>
+        </div>
+        <div class="bg-softBeige p-8 rounded-2xl border border-gray-100 space-y-4 hover:border-classicGold/40 transition-all">
+          <div class="w-12 h-12 bg-deepEmerald text-classicGold rounded-xl flex items-center justify-center text-lg">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <h4 class="font-serif font-bold text-xl text-deepEmerald">Zero Toxins</h4>
+          <p class="text-xs text-mutedGray leading-relaxed">Zero lead, zero cadmium, and zero synthetic polymers or chemical glazes used in our kitchenware.</p>
+        </div>
+        <div class="bg-softBeige p-8 rounded-2xl border border-gray-100 space-y-4 hover:border-classicGold/40 transition-all">
+          <div class="w-12 h-12 bg-deepEmerald text-classicGold rounded-xl flex items-center justify-center text-lg">
+            <i class="fa-solid fa-handshake-angle"></i>
+          </div>
+          <h4 class="font-serif font-bold text-xl text-deepEmerald">Artisan First</h4>
+          <p class="text-xs text-mutedGray leading-relaxed">Direct partnerships with master potters across villages, ensuring their invaluable craft thrives for generations.</p>
+        </div>
+        <div class="bg-softBeige p-8 rounded-2xl border border-gray-100 space-y-4 hover:border-classicGold/40 transition-all">
+          <div class="w-12 h-12 bg-deepEmerald text-classicGold rounded-xl flex items-center justify-center text-lg">
+            <i class="fa-solid fa-box-open"></i>
+          </div>
+          <h4 class="font-serif font-bold text-xl text-deepEmerald">Plastic-Free Pack</h4>
+          <p class="text-xs text-mutedGray leading-relaxed">Shipped strictly in corrugated cardboard boxes secured with gum paper tapes and biodegradable husk stuffing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEW SECTION: OUR CRAFTSMANSHIP PROCESS -->
+  <section class="py-20 px-6 max-w-6xl mx-auto">
+    <div class="text-center max-w-xl mx-auto mb-16 space-y-3">
+      <span class="text-[10px] uppercase tracking-[0.3em] text-classicGold font-bold">Step-by-Step Excellence</span>
+      <h3 class="font-serif font-bold text-3xl sm:text-4xl text-deepEmerald">How Our Products Come to Life</h3>
+      <p class="text-xs text-mutedGray">A meticulous journey from raw earth and bamboo groves to your dining table.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-4 relative">
+        <span class="absolute top-6 right-6 font-serif font-bold text-3xl text-classicGold/30">01</span>
+        <div class="w-10 h-10 bg-champagne text-deepEmerald rounded-lg flex items-center justify-center font-bold text-sm">
+          <i class="fa-solid fa-mountain"></i>
+        </div>
+        <h4 class="font-serif font-bold text-xl text-deepEmerald">Ethical Sourcing</h4>
+        <p class="text-xs text-mutedGray leading-relaxed">We source pure alluvial clay from certified riverbeds and sustainably managed bamboo farms that require no chemical fertilizers or artificial irrigation.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-4 relative">
+        <span class="absolute top-6 right-6 font-serif font-bold text-3xl text-classicGold/30">02</span>
+        <div class="w-10 h-10 bg-champagne text-deepEmerald rounded-lg flex items-center justify-center font-bold text-sm">
+          <i class="fa-solid fa-fire-burner"></i>
+        </div>
+        <h4 class="font-serif font-bold text-xl text-deepEmerald">Traditional Kiln Firing</h4>
+        <p class="text-xs text-mutedGray leading-relaxed">Every piece is hand-thrown on traditional potter's wheels and fired in controlled natural kilns, retaining the micro-porous structure essential for healthy cooking.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-4 relative">
+        <span class="absolute top-6 right-6 font-serif font-bold text-3xl text-classicGold/30">03</span>
+        <div class="w-10 h-10 bg-champagne text-deepEmerald rounded-lg flex items-center justify-center font-bold text-sm">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <h4 class="font-serif font-bold text-xl text-deepEmerald">Conscious Delivery</h4>
+        <p class="text-xs text-mutedGray leading-relaxed">Packed carefully using recycled paper cushioning and sturdy outer cartons, ensuring your items arrive safely without leaving a single trace of plastic behind.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-deepEmerald text-white py-12 mt-16 border-t border-classicGold/20">
+    <div class="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300 space-y-3">
+      <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE ORGANICS</h3>
+      <p>&copy; 2026 GreenLife Organics. Handcrafted with Care &bull; Plastic-Free Initiative.</p>
+    </div>
+  </footer>
+
+  <script>
+    function updateCartCount() {
+      let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
+      document.getElementById('cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+    }
+    updateCartCount();
+  </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenLife Organics | Artisanal Bamboo & Clay Essentials</title>
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            deepEmerald: '#0F2C23',
+            classicGold: '#C5A059',
+            champagne: '#F4EFEA',
+            softBeige: '#FAF8F5',
+            accentBronze: '#8C6239',
+            mutedGray: '#666666'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-softBeige text-gray-900 font-sans antialiased selection:bg-classicGold selection:text-white min-h-screen flex flex-col justify-between">
+
+  <!-- TOP BANNER -->
+  <div class="bg-deepEmerald text-classicGold text-xs py-2.5 px-4 text-center font-medium tracking-widest uppercase border-b border-classicGold/20">
+    <span>Complimentary Shipping On All Orders Above ₹500 &nbsp;•&nbsp; 100% Eco-Friendly & Plastic Free</span>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      
+      <!-- Logo -->
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 border border-classicGold flex items-center justify-center text-classicGold font-serif text-xl rounded-full group-hover:bg-classicGold group-hover:text-white transition-all">
+          G
+        </div>
+        <div>
+          <h1 class="text-2xl font-serif font-bold tracking-wider text-deepEmerald leading-none">GREENLIFE</h1>
+          <p class="text-[9px] uppercase tracking-[0.25em] text-classicGold font-semibold mt-1">Organics & Artisanal Living</p>
+        </div>
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav class="hidden md:flex items-center gap-10 font-medium text-xs tracking-widest uppercase text-gray-700">
+        <a href="index.html" class="text-deepEmerald font-bold border-b border-classicGold pb-1">Home</a>
+        <a href="products.html" class="hover:text-classicGold transition-colors">Shop</a>
+        <a href="about.html" class="hover:text-classicGold transition-colors">About Us</a>
+        <a href="contact.html" class="hover:text-classicGold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Cart Button -->
+      <a href="cart.html" class="relative group flex items-center gap-2.5 text-deepEmerald font-medium text-xs tracking-wider uppercase bg-champagne px-4 py-2.5 rounded-full border border-gray-200/60 hover:border-classicGold transition-all">
+        <i class="fa-solid fa-bag-shopping text-classicGold text-sm"></i>
+        <span>Bag</span>
+        <span id="cart-count" class="bg-deepEmerald text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative py-20 md:py-28 px-6 bg-gradient-to-b from-champagne/60 to-softBeige overflow-hidden">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      
+      <div class="space-y-6 text-center lg:text-left">
+        <span class="inline-block text-classicGold uppercase tracking-[0.3em] text-xs font-semibold">Handcrafted • Sustainable • Organic</span>
+        <h2 class="text-4xl sm:text-5xl md:text-6xl font-serif font-normal text-deepEmerald leading-[1.15]">
+          Handcrafted Bamboo & Pure Clay Living.
+        </h2>
+        <p class="text-mutedGray text-sm md:text-base leading-relaxed max-w-lg mx-auto lg:mx-0">
+          From artisan mitti cookware and natural soil water bottles to handcrafted bamboo lamps, storage baskets, and kitchenware — elevate your home naturally.
+        </p>
+        <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a href="products.html" class="bg-deepEmerald text-white text-xs uppercase tracking-widest px-8 py-4 rounded hover:bg-classicGold transition-all shadow-md text-center">
+            Explore Collection
+          </a>
+          <a href="about.html" class="border border-deepEmerald text-deepEmerald text-xs uppercase tracking-widest px-8 py-4 rounded hover:bg-deepEmerald hover:text-white transition-all text-center">
+            Read Our Story
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual Showcase -->
+      <div class="grid grid-cols-2 gap-4 sm:gap-6">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3 text-center hover:border-classicGold transition-all">
+          <img src="images/Handwoven Bamboo Lamp Shade.jpg" alt="Bamboo Lampshade" class="w-full h-44 object-cover rounded-xl" />
+          <h3 class="font-serif font-bold text-deepEmerald text-base">Bamboo Lamps & Decor</h3>
+          <p class="text-xs text-mutedGray">Woven Ambient Lights</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 space-y-3 text-center mt-6 hover:border-classicGold transition-all">
+          <img src="images/clay-bottle-1.jpg" alt="Clay Soil Bottle" class="w-full h-44 object-cover rounded-xl" />
+          <h3 class="font-serif font-bold text-deepEmerald text-base">Soil & Clay Bottles</h3>
+          <p class="text-xs text-mutedGray">Natural Cool Hydration</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DISTINCT REAL IMAGE CATEGORIES SECTION -->
+  <section class="py-16 px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-classicGold uppercase tracking-[0.25em] text-xs font-semibold">Artisanal Collections</span>
+        <h3 class="text-3xl md:text-4xl font-serif text-deepEmerald font-normal mt-2">Explore By Category</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Category 1: Bamboo Care -->
+        <a href="products.html" class="group relative overflow-hidden rounded-2xl h-80 shadow-md flex flex-col justify-end p-6 border border-gray-100">
+          <img src="images/Bamboo Toothbrush (Pack of 4).jpg" alt="Bamboo Care" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-deepEmerald/90 via-deepEmerald/40 to-transparent"></div>
+          <div class="relative z-10 text-white space-y-1">
+            <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold">Personal Care</span>
+            <h4 class="font-serif text-2xl font-bold">Bamboo Care</h4>
+            <p class="text-xs text-gray-200 line-clamp-2">Compostable Toothbrushes, Hair Combs & Travel Kits.</p>
+            <span class="inline-block pt-2 text-xs font-bold text-classicGold group-hover:translate-x-1 transition-transform">Explore Category →</span>
+          </div>
+        </a>
+
+        <!-- Category 2: Bamboo Decor (Fixed Image) -->
+        <a href="products.html" class="group relative overflow-hidden rounded-2xl h-80 shadow-md flex flex-col justify-end p-6 border border-gray-100">
+          <img src="images/Handwoven Bamboo Lamp Shade.jpg" alt="Bamboo Decor Lamp" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-deepEmerald/90 via-deepEmerald/40 to-transparent"></div>
+          <div class="relative z-10 text-white space-y-1">
+            <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold">Interior & Lighting</span>
+            <h4 class="font-serif text-2xl font-bold">Bamboo Decor</h4>
+            <p class="text-xs text-gray-200 line-clamp-2">Handwoven Lampshades, Hanging Lights & Baskets.</p>
+            <span class="inline-block pt-2 text-xs font-bold text-classicGold group-hover:translate-x-1 transition-transform">Explore Category →</span>
+          </div>
+        </a>
+
+        <!-- Category 3: Soil & Clay Bottles -->
+        <a href="products.html" class="group relative overflow-hidden rounded-2xl h-80 shadow-md flex flex-col justify-end p-6 border border-gray-100">
+          <img src="images/Terracotta Travel Sipper Bottle (750ml).jpg" alt="Soil & Clay Bottles" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-deepEmerald/90 via-deepEmerald/40 to-transparent"></div>
+          <div class="relative z-10 text-white space-y-1">
+            <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold">Pure Clay</span>
+            <h4 class="font-serif text-2xl font-bold">Soil & Clay Bottles</h4>
+            <p class="text-xs text-gray-200 line-clamp-2">Natural Terracotta Water Flasks & Clay Jugs.</p>
+            <span class="inline-block pt-2 text-xs font-bold text-classicGold group-hover:translate-x-1 transition-transform">Explore Category →</span>
+          </div>
+        </a>
+
+        <!-- Category 4: Kitchen Essentials -->
+        <a href="products.html" class="group relative overflow-hidden rounded-2xl h-80 shadow-md flex flex-col justify-end p-6 border border-gray-100">
+          <img src="images/Bamboo Cooking Utensils Set (6 Pcs).jpg" alt="Kitchen Essentials" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-deepEmerald/90 via-deepEmerald/40 to-transparent"></div>
+          <div class="relative z-10 text-white space-y-1">
+            <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold">Culinary Tools</span>
+            <h4 class="font-serif text-2xl font-bold">Kitchen Essentials</h4>
+            <p class="text-xs text-gray-200 line-clamp-2">Bamboo Spatulas, Trays & Organic Clay Pots.</p>
+            <span class="inline-block pt-2 text-xs font-bold text-classicGold group-hover:translate-x-1 transition-transform">Explore Category →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="py-16 px-6 bg-softBeige">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-classicGold uppercase tracking-[0.25em] text-xs font-semibold">Curated Essentials</span>
+        <h3 class="text-3xl md:text-4xl font-serif text-deepEmerald font-normal mt-2">Popular Handcrafted Products</h3>
+      </div>
+
+      <div id="featured-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <p class="col-span-full text-center text-xs text-mutedGray">Loading featured products...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="py-12 bg-white border-y border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-truck-ramp-box text-classicGold text-2xl"></i>
+        <div>
+          <h4 class="font-serif font-bold text-deepEmerald text-base">Express Shipping</h4>
+          <p class="text-xs text-mutedGray">Pan-India Safe Packaging</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-leaf text-classicGold text-2xl"></i>
+        <div>
+          <h4 class="font-serif font-bold text-deepEmerald text-base">Zero Plastic</h4>
+          <p class="text-xs text-mutedGray">100% Biodegradable Materials</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-hands-holding-child text-classicGold text-2xl"></i>
+        <div>
+          <h4 class="font-serif font-bold text-deepEmerald text-base">Empower Artisans</h4>
+          <p class="text-xs text-mutedGray">Sourced Directly from Potters & Craftsmen</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <i class="fa-solid fa-shield-halved text-classicGold text-2xl"></i>
+        <div>
+          <h4 class="font-serif font-bold text-deepEmerald text-base">Secure COD</h4>
+          <p class="text-xs text-mutedGray">Sign in only when you are ready to order</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-deepEmerald text-white pt-16 pb-8 border-t border-classicGold/20">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-white/10 text-xs text-gray-300">
+      <div class="space-y-4">
+        <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE</h3>
+        <p class="leading-relaxed">Curating timeless organic essentials in Bamboo & Soil for sustainable luxury living.</p>
+      </div>
+      <div>
+        <h4 class="text-classicGold font-semibold uppercase tracking-widest mb-4">Navigation</h4>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="hover:text-classicGold">Home</a></li>
+          <li><a href="products.html" class="hover:text-classicGold">Shop</a></li>
+          <li><a href="about.html" class="hover:text-classicGold">About Us</a></li>
+          <li><a href="contact.html" class="hover:text-classicGold">Contact</a></li>
+          <li><a href="seller.html" class="hover:text-classicGold">Sell With Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-classicGold font-semibold uppercase tracking-widest mb-4">Client Support</h4>
+        <p class="mb-2">📞 +91 123456789</p>
+        <p class="mb-2">✉️ concierge@greenlife.com</p>
+        <p>🕒 Mon - Sat (9:00 AM - 7:00 PM)</p>
+      </div>
+      <div>
+        <h4 class="text-classicGold font-semibold uppercase tracking-widest mb-4">Connect</h4>
+        <div class="flex gap-4 text-base text-classicGold">
+          <a href="#" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="hover:text-white"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="#" class="hover:text-white"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-6 pt-6 flex justify-center items-center text-[11px] text-gray-400">
+      <p>© 2026 GreenLife Organics. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <div id="ai-chatbot-container" class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleChatbot()" class="bg-deepEmerald hover:bg-classicGold text-white p-4 rounded-full shadow-2xl border border-classicGold/40 text-xl w-14 h-14 flex items-center justify-center transition-all">
+      <i class="fa-solid fa-comments"></i>
+    </button>
+
+    <div id="chatbot-window" class="hidden fixed bottom-24 right-4 sm:right-6 w-[90vw] sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden text-sm">
+      <div class="bg-deepEmerald text-white p-4 flex justify-between items-center border-b border-classicGold/30">
+        <div>
+          <h5 class="font-serif text-base font-bold text-classicGold">GreenLife Concierge</h5>
+          <p class="text-[10px] text-gray-300">Personal Website Assistant</p>
+        </div>
+        <button onclick="toggleChatbot()" class="text-gray-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div id="chat-messages" class="p-4 h-80 overflow-y-auto space-y-3 bg-softBeige text-xs">
+        <div class="bg-white border border-gray-200 p-3 rounded-xl text-deepEmerald shadow-sm leading-relaxed">
+          Welcome to **GreenLife**. I can guide you regarding Bamboo Toothbrushes, Lamps, Soil Water Bottles, and Kitchen Essentials. How may I assist you today?
+        </div>
+      </div>
+
+      <div class="p-3 border-t bg-white flex gap-2">
+        <input type="text" id="chat-input" placeholder="Ask about products, orders, or support..." class="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs outline-none focus:border-classicGold" onkeypress="if(event.key==='Enter') sendMsg()" />
+        <button onclick="sendMsg()" class="bg-deepEmerald text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-classicGold transition-colors">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    function updateCartCount() {
+      let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
+      document.getElementById('cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+    }
+
+    async function loadFeaturedProducts() {
+      const container = document.getElementById('featured-products');
+      try {
+        const products = await apiRequest('/api/products');
+        const featured = [7, 9, 1, 11]
+          .map(id => products.find(product => product.id === id))
+          .filter(Boolean);
+        if (!featured.length) {
+          container.innerHTML = `<p class="col-span-full text-center text-xs text-mutedGray">No featured products available.</p>`;
+          return;
+        }
+        container.innerHTML = featured.map(product => `
+          <article class="bg-white p-5 rounded-2xl border border-gray-100 flex flex-col justify-between hover:shadow-xl transition-all">
+            <div>
+              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="w-full h-48 object-contain rounded-xl mb-4" />
+              <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold">${escapeHtml(product.category)}</span>
+              <h4 class="font-serif font-bold text-lg text-deepEmerald mt-1">${escapeHtml(product.name)}</h4>
+            </div>
+            <div class="mt-4 flex justify-between items-center border-t pt-3">
+              <span class="font-bold text-deepEmerald">₹${product.price}</span>
+              <a href="products.html" class="text-xs font-semibold text-classicGold uppercase tracking-wider hover:underline">View Product</a>
+            </div>
+          </article>
+        `).join('');
+      } catch (error) {
+        console.error("Featured products load failed:", error);
+        container.innerHTML = `<p class="col-span-full text-center text-red-600 text-xs">Featured products load nahi hue: ${escapeHtml(error.message)}. Backend chalu karke page refresh karein.</p>`;
+      }
+    }
+
+    function toggleChatbot() {
+      document.getElementById('chatbot-window').classList.toggle('hidden');
+    }
+
+    function sendMsg() {
+      let inp = document.getElementById('chat-input');
+      let val = inp.value.trim();
+      if(!val) return;
+
+      let box = document.getElementById('chat-messages');
+      box.innerHTML += `<div class="bg-deepEmerald text-white p-3 rounded-xl ml-auto max-w-[85%] text-right">${val}</div>`;
+      inp.value = '';
+      box.scrollTop = box.scrollHeight;
+
+      setTimeout(() => {
+        let reply = "We offer a wide variety of Bamboo Care, Soil Bottles, Handwoven Lamps, and Kitchen items. You can browse them on our Shop page!";
+        let v = val.toLowerCase();
+        if(v.includes('bamboo') || v.includes('teeth') || v.includes('brush') || v.includes('lamp') || v.includes('basket')) reply = "We have **Bamboo Toothbrushes**, **Handwoven Lamp Covers**, **Storage Baskets**, and **Kitchen Spatulas**. All 100% natural and durable!";
+        if(v.includes('soil') || v.includes('bottle') || v.includes('clay') || v.includes('kitchen')) reply = "Our **Organic Soil Water Bottles** and **Terracotta Cooking Pots** keep water naturally cool and retain food minerals!";
+        if(v.includes('order') || v.includes('buy')) reply = "Browse our **Shop** and add your choices to the Bag. When you are ready to place a COD order, sign in or create an account at checkout.";
+
+        box.innerHTML += `<div class="bg-white border border-gray-200 p-3 rounded-xl text-deepEmerald max-w-[85%]">${reply}</div>`;
+        box.scrollTop = box.scrollHeight;
+      }, 500);
+    }
+
+    updateCartCount();
+    loadFeaturedProducts();
+  </script>
+</body>
+</html>

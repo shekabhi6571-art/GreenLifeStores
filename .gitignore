@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local database may contain customer, order, and inquiry information.
+greenlife.db
+greenlife.db-shm
+greenlife.db-wal
+
+# Seller-uploaded images are user submissions, not source assets.
+images/seller-submissions/
+
+# Local secrets and environment configuration.
+.env
+.env.*
+!.env.example
