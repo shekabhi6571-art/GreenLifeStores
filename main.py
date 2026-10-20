@@ -19,7 +19,7 @@ app.add_middleware(
 
 FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY", "YOUR_FAST2SMS_API_KEY_HERE")
 
-# In-memory storage
+# In-memory storage for demo session and orders
 fake_db = {
     "current_customer": None,
     "pending_customer": None,
@@ -86,7 +86,7 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
             print(f"SMS Error: {e}")
             return None
 
-# --- Products API with Exact Original Image Filenames ---
+# --- Products API with Exact Matched Image Filenames ---
 @app.get("/api/products")
 def get_products():
     return [
@@ -103,7 +103,7 @@ def get_products():
             "name": "Terracotta Travel Sipper", 
             "category": "soil", 
             "price": 599, 
-            "image": "images/Terracotta Travel Sipper Bottle.jpg", 
+            "image": "images/TerracottaTravelSipperBottle(750ml).jpg", 
             "description": "A portable terracotta sipper bottle made for carrying water on commutes and travel."
         },
         {
@@ -111,7 +111,7 @@ def get_products():
             "name": "Warli Art Terracotta Bottle", 
             "category": "soil", 
             "price": 699, 
-            "image": "images/Hand-Painted Warli Art Clay Bottle.jpg", 
+            "image": "images/Hand-PaintedWarliArtClayBottle.jpg", 
             "description": "A terracotta bottle decorated with traditional handcrafted art."
         },
         {
@@ -119,7 +119,7 @@ def get_products():
             "name": "Traditional Mitti Jug & Cup Set", 
             "category": "soil", 
             "price": 799, 
-            "image": "images/Traditional Mitti Jug & Cup Set.jpg", 
+            "image": "images/TraditionalMittiJug%26CupSet.jpg", 
             "description": "A traditional mitti jug paired with clay cups for serving water at home."
         },
         {
@@ -127,7 +127,7 @@ def get_products():
             "name": "Handcrafted Clay Curd Handi", 
             "category": "soil", 
             "price": 349, 
-            "image": "images/Clay Curd & Yogurt Handi Pot.jpg", 
+            "image": "images/ClayCurd%26YogurtHandiPot.jpg", 
             "description": "A clay handi pot ideal for preparing and serving curd or yogurt."
         },
         {
@@ -135,7 +135,7 @@ def get_products():
             "name": "Terracotta Water Dispenser", 
             "category": "soil", 
             "price": 1299, 
-            "image": "images/Terracotta Water Matka Dispenser with Tap.jpg", 
+            "image": "images/TerracottaWaterMatkaDispenserwithTap.jpg", 
             "description": "A terracotta water dispenser with tap for convenient household use."
         },
         {
@@ -143,7 +143,7 @@ def get_products():
             "name": "Bamboo Toothbrush Pack of 4", 
             "category": "care", 
             "price": 299, 
-            "image": "images/Bamboo Toothbrush (Pack of 4).jpg", 
+            "image": "images/BambooToothbrush(Packof4).jpg", 
             "description": "A pack of four eco-friendly bamboo toothbrushes for daily oral care."
         },
         {
@@ -151,7 +151,7 @@ def get_products():
             "name": "Neem & Bamboo Comb Set", 
             "category": "care", 
             "price": 249, 
-            "image": "images/Natural Neem & Bamboo Grooming Comb Set.jpg", 
+            "image": "images/NaturalNeem%26BambooCombSet.jpg", 
             "description": "A natural neem and bamboo comb set for daily hair grooming."
         },
         {
@@ -159,7 +159,7 @@ def get_products():
             "name": "Handwoven Bamboo Lamp Shade", 
             "category": "decor", 
             "price": 899, 
-            "image": "images/Handwoven Bamboo Lamp Shade.jpg", 
+            "image": "images/HandwovenBambooLampShade.jpg", 
             "description": "A handwoven bamboo lamp shade adding warmth and natural texture."
         },
         {
@@ -167,7 +167,7 @@ def get_products():
             "name": "Bamboo Storage Basket", 
             "category": "decor", 
             "price": 649, 
-            "image": "images/Handcrafted Bamboo Storage Basket.jpg", 
+            "image": "images/HandcraftedBambooStorageBasket.jpg", 
             "description": "A woven bamboo storage basket for home organization."
         },
         {
@@ -175,7 +175,7 @@ def get_products():
             "name": "Bamboo Utensils Set of 6", 
             "category": "kitchen", 
             "price": 499, 
-            "image": "images/Bamboo Cooking Utensils Set of 6.jpg", 
+            "image": "images/BambooCookingUtensilsSet(6Pcs).jpg", 
             "description": "A set of six lightweight bamboo cooking spoons and utensils."
         },
         {
@@ -183,12 +183,12 @@ def get_products():
             "name": "Clay Cooking Handi Pot", 
             "category": "kitchen", 
             "price": 549, 
-            "image": "images/Artisan Clay Cooking Handi Pot.jpg", 
+            "image": "images/ArtisanClayCookingHandiPot.jpg", 
             "description": "A traditional clay cooking pot for rustic home meals."
         }
     ]
 
-# --- Customer Authentication APIs ---
+# --- Customer Authentication & Account APIs ---
 @app.post("/api/customer/register")
 async def customer_register(data: CustomerRegisterSchema):
     fake_db["pending_customer"] = data.dict()
