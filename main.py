@@ -1,7 +1,7 @@
 import os
 import httpx
-from typing import List
-from fastapi import FastAPI
+from typing import List, Optional
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -19,6 +19,14 @@ app.add_middleware(
 
 FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY", "YOUR_FAST2SMS_API_KEY_HERE")
 
+# In-memory storage for demo session and orders
+fake_db = {
+    "current_customer": None,
+    "pending_customer": None,
+    "otp_store": {},
+    "orders": []
+}
+
 class OrderItem(BaseModel):
     id: int
     name: str
@@ -33,6 +41,24 @@ class OrderCreate(BaseModel):
     pincode: str
     total_amount: float
     items: List[OrderItem]
+
+class CustomerRegisterSchema(BaseModel):
+    name: str
+    email: str
+    phone: str
+    password: str
+    marketing_consent: bool = False
+
+class OtpVerifySchema(BaseModel):
+    phone: str
+    otp: str
+
+class CustomerLoginSchema(BaseModel):
+    identifier: str
+    password: str
+
+class ConsentSchema(BaseModel):
+    marketing_consent: bool
 
 async def send_order_sms(phone_number: str, order_id: str, amount: str):
     url = "https://www.fast2sms.com/dev/bulkV2"
@@ -60,28 +86,82 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
             print(f"SMS Error: {e}")
             return None
 
-# --- API Endpoints ---
+# --- Products API ---
 @app.get("/api/products")
 def get_products():
     return [
-        {"id": 1, "name": "Earthy Clay Water Bottle", "category": "soil", "price": 499, "image": "https://via.placeholder.com/200"},
-        {"id": 2, "name": "Terracotta Travel Sipper Bottle", "category": "soil", "price": 599, "image": "https://via.placeholder.com/200"},
-        {"id": 3, "name": "Warli Art Terracotta Bottle", "category": "soil", "price": 699, "image": "https://via.placeholder.com/200"},
-        {"id": 4, "name": "Traditional Mitti Jug & Cup Set", "category": "soil", "price": 799, "image": "https://via.placeholder.com/200"},
-        {"id": 5, "name": "Handcrafted Clay Curd Handi", "category": "soil", "price": 349, "image": "https://via.placeholder.com/200"},
-        {"id": 6, "name": "Terracotta Water Dispenser", "category": "soil", "price": 1299, "image": "https://via.placeholder.com/200"},
-        {"id": 7, "name": "Bamboo Toothbrush Pack of 4", "category": "care", "price": 299, "image": "https://via.placeholder.com/200"},
-        {"id": 8, "name": "Neem & Bamboo Grooming Comb Set", "category": "care", "price": 249, "image": "https://via.placeholder.com/200"},
-        {"id": 9, "name": "Handwoven Bamboo Lamp Shade", "category": "decor", "price": 899, "image": "https://via.placeholder.com/200"},
-        {"id": 10, "name": "Handcrafted Bamboo Storage Basket", "category": "decor", "price": 649, "image": "https://via.placeholder.com/200"},
-        {"id": 11, "name": "Bamboo Cooking Utensils Set of 6", "category": "kitchen", "price": 499, "image": "https://via.placeholder.com/200"},
-        {"id": 12, "name": "Clay Cooking Handi Pot", "category": "kitchen", "price": 549, "image": "https://via.placeholder.com/200"}
+        {"id": 1, "name": "Earthy Clay Water Bottle", "category": "soil", "price": 499, "image": "https://via.placeholder.com/200", "description": "A reusable clay water bottle..."},
+        {"id": 2, "name": "Terracotta Travel Sipper Bottle", "category": "soil", "price": 599, "image": "https://via.placeholder.com/200", "description": "A portable terracotta sipper..."},
+        {"id": 3, "name": "Warli Art Terracotta Bottle", "category": "soil", "price": 699, "image": "https://via.placeholder.com/200", "description": "A terracotta bottle decorated..."},
+        {"id": 4, "name": "Traditional Mitti Jug & Cup Set", "category": "soil", "price": 799, "image": "https://via.placeholder.com/200", "description": "A traditional mitti jug..."},
+        {"id": 5, "name": "Handcrafted Clay Curd Handi", "category": "soil", "price": 349, "image": "https://via.placeholder.com/200", "description": "A clay handi pot..."},
+        {"id": 6, "name": "Terracotta Water Dispenser", "category": "soil", "price": 1299, "image": "https://via.placeholder.com/200", "description": "A terracotta water dispenser..."},
+        {"id": 7, "name": "Bamboo Toothbrush Pack of 4", "category": "care", "price": 299, "image": "https://via.placeholder.com/200", "description": "A pack of four bamboo toothbrushes..."},
+        {"id": 8, "name": "Neem & Bamboo Grooming Comb Set", "category": "care", "price": 249, "image": "https://via.placeholder.com/200", "description": "A neem and bamboo comb set..."},
+        {"id": 9, "name": "Handwoven Bamboo Lamp Shade", "category": "decor", "price": 899, "image": "https://via.placeholder.com/200", "description": "A handwoven bamboo lamp shade..."},
+        {"id": 10, "name": "Handcrafted Bamboo Storage Basket", "category": "decor", "price": 649, "image": "https://via.placeholder.com/200", "description": "A handcrafted bamboo storage basket..."},
+        {"id": 11, "name": "Bamboo Cooking Utensils Set of 6", "category": "kitchen", "price": 499, "image": "https://via.placeholder.com/200", "description": "A set of six bamboo cooking utensils..."},
+        {"id": 12, "name": "Clay Cooking Handi Pot", "category": "kitchen", "price": 549, "image": "https://via.placeholder.com/200", "description": "A clay cooking handi pot..."}
     ]
 
+# --- Customer Authentication & Account APIs ---
+@app.post("/api/customer/register")
+async def customer_register(data: CustomerRegisterSchema):
+    fake_db["pending_customer"] = data.dict()
+    fake_db["otp_store"][data.phone] = "123456"  # Demo OTP
+    return {"status": "success", "message": "OTP sent to your phone successfully! (Demo OTP: 123456)"}
+
+@app.post("/api/customer/verify-otp")
+async def verify_otp(data: OtpVerifySchema):
+    if data.phone in fake_db["otp_store"] and data.otp == "123456":
+        fake_db["current_customer"] = fake_db.get("pending_customer")
+        return {"status": "success", "message": "Verified successfully"}
+    raise HTTPException(status_code=400, detail="Invalid OTP")
+
+@app.post("/api/customer/login")
+async def customer_login(data: CustomerLoginSchema):
+    fake_db["current_customer"] = {
+        "name": "Abhishek Yadav",
+        "email": data.identifier if "@" in data.identifier else "user@gmail.com",
+        "phone": data.identifier if "@" not in data.identifier else "9801557358",
+        "marketing_consent": True
+    }
+    return {"status": "success", "message": "Logged in successfully"}
+
+@app.get("/api/customer/session")
+async def customer_session():
+    if fake_db["current_customer"]:
+        return {"authenticated": True, "customer": fake_db["current_customer"]}
+    return {"authenticated": False}
+
+@app.get("/api/customer/orders")
+async def customer_orders():
+    return fake_db["orders"]
+
+@app.patch("/api/customer/marketing-consent")
+async def update_consent(data: ConsentSchema):
+    if fake_db["current_customer"]:
+        fake_db["current_customer"]["marketing_consent"] = data.marketing_consent
+    return {"status": "success"}
+
+@app.post("/api/customer/logout")
+async def customer_logout():
+    fake_db["current_customer"] = None
+    return {"status": "success"}
+
+# --- Checkout API ---
 @app.post("/api/checkout")
 async def checkout(order: OrderCreate):
     import random
     order_id = str(random.randint(100000, 999999))
+    order_obj = {
+        "id": order_id,
+        "total": order.total_amount,
+        "address": f"{order.address}, {order.city} - {order.pincode}",
+        "items": [{"quantity": i.qty, "name": i.name} for i in order.items],
+        "created_at": "2026-06-06T12:00:00"
+    }
+    fake_db["orders"].append(order_obj)
     if order.phone:
         await send_order_sms(phone_number=order.phone, order_id=order_id, amount=str(order.total_amount))
     return {"status": "success", "order_id": order_id, "message": "Order placed successfully!"}
