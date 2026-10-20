@@ -1,263 +1,235 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shop | GreenLife Organics</title>
-  
-  <!-- Tailwind CSS & FontAwesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['Cormorant Garamond', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          colors: {
-            deepEmerald: '#0F2C23',
-            classicGold: '#C5A059',
-            champagne: '#F4EFEA',
-            softBeige: '#FAF8F5',
-            mutedGray: '#666666'
-          }
-        }
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | GreenLifeStores</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-softBeige text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-green-50 text-gray-800 font-sans">
 
-  <!-- TOP BANNER -->
-  <div class="bg-deepEmerald text-classicGold text-xs py-2.5 px-4 text-center font-medium tracking-widest uppercase border-b border-classicGold/20">
-    <span>Free Shipping On Orders Above ₹500 &nbsp;&bull;&nbsp; 100% Handcrafted & Plastic Free</span>
-  </div>
-
-  <!-- NAVIGATION HEADER -->
-  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      
-      <a href="index.html" class="flex items-center gap-3">
-        <div class="w-10 h-10 border border-classicGold flex items-center justify-center text-classicGold font-serif text-xl rounded-full">
-          G
-        </div>
-        <div>
-          <h1 class="text-2xl font-serif font-bold tracking-wider text-deepEmerald leading-none">GREENLIFE</h1>
-          <p class="text-[9px] uppercase tracking-[0.25em] text-classicGold font-semibold mt-1">Organics & Artisanal Living</p>
-        </div>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-10 font-medium text-xs tracking-widest uppercase text-gray-700">
-        <a href="index.html" class="hover:text-classicGold transition-colors">Home</a>
-        <a href="products.html" class="text-deepEmerald font-bold border-b border-classicGold pb-1">Shop</a>
-        <a href="about.html" class="hover:text-classicGold transition-colors">About Us</a>
-        <a href="contact.html" class="hover:text-classicGold transition-colors">Contact</a>
-      </nav>
-
-      <a href="cart.html" class="relative flex items-center gap-2 text-deepEmerald font-medium text-xs tracking-wider uppercase bg-champagne px-4 py-2.5 rounded-full border border-gray-200">
-        <i class="fa-solid fa-bag-shopping text-classicGold"></i>
-        <span>Bag</span>
-        <span id="cart-count" class="bg-deepEmerald text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-      </a>
-    </div>
-  </header>
-
-  <!-- PAGE HEADER -->
-  <section class="bg-champagne/60 py-12 px-6 text-center border-b border-gray-200/60">
-    <h2 class="text-4xl font-serif text-deepEmerald font-bold">Shop Sustainable Products</h2>
-    <p class="text-xs text-mutedGray mt-2 max-w-md mx-auto">Explore authentic bamboo crafts, mitti cookware, terracotta water bottles, and home essentials.</p>
-    <a href="seller.html" class="mt-4 inline-block text-xs font-semibold text-deepEmerald underline decoration-classicGold underline-offset-4">Handmade or sustainable products? Sell with us</a>
-  </section>
-
-  <!-- PRODUCTS & FILTER SECTION -->
-  <section class="py-12 px-6 max-w-7xl mx-auto w-full">
-    
-    <!-- Filter Buttons -->
-    <div class="flex flex-wrap justify-center gap-3 mb-10 text-xs font-semibold uppercase tracking-wider">
-      <button onclick="filterProducts('all', event)" class="filter-btn bg-deepEmerald text-white px-5 py-2.5 rounded-full transition-all">All Products</button>
-      <button onclick="filterProducts('soil', event)" class="filter-btn bg-white text-deepEmerald border border-gray-200 hover:border-classicGold px-5 py-2.5 rounded-full transition-all">Soil & Clay</button>
-      <button onclick="filterProducts('care', event)" class="filter-btn bg-white text-deepEmerald border border-gray-200 hover:border-classicGold px-5 py-2.5 rounded-full transition-all">Bamboo Care</button>
-      <button onclick="filterProducts('decor', event)" class="filter-btn bg-white text-deepEmerald border border-gray-200 hover:border-classicGold px-5 py-2.5 rounded-full transition-all">Decor</button>
-      <button onclick="filterProducts('kitchen', event)" class="filter-btn bg-white text-deepEmerald border border-gray-200 hover:border-classicGold px-5 py-2.5 rounded-full transition-all">Kitchen</button>
-    </div>
-
-    <!-- Product Grid -->
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Products are rendered from the backend or local catalog -->
-    </div>
-  </section>
-
-  <dialog id="product-details" aria-labelledby="product-details-title" class="w-[min(92vw,760px)] max-w-none rounded-2xl p-0 shadow-2xl backdrop:bg-black/60">
-    <div id="product-details-content"></div>
-  </dialog>
-
-  <!-- FOOTER -->
-  <footer class="bg-deepEmerald text-white py-12 mt-16 border-t border-classicGold/20">
-    <div class="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300 space-y-3">
-      <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE ORGANICS</h3>
-      <p>&copy; 2026 GreenLife Organics. Handcrafted with Care.</p>
-      <a href="admin.html" class="inline-block pt-2 text-[11px] text-gray-400 underline underline-offset-4 hover:text-classicGold">Store Admin</a>
-    </div>
-  </footer>
-
-  <script src="api.js"></script>
-  <!-- JAVASCRIPT FOR PRODUCT CATALOG & CART -->
-  <script>
-    let allProducts = [];
-    const productDescriptions = {
-      1: 'A reusable clay water bottle for keeping drinking water at home or at work. Its earthy finish makes it a thoughtful everyday alternative to disposable bottles.',
-      2: 'A portable terracotta sipper bottle made for carrying water on commutes, outings, and travel. The traditional clay look brings handcrafted character to your daily routine.',
-      3: 'A terracotta bottle decorated with Warli-inspired artwork. It works as a distinctive drinkware piece and a colourful accent for a dining or display space.',
-      4: 'A traditional mitti jug paired with cups for serving water at home. The set brings an artisanal touch to family meals and relaxed gatherings.',
-      5: 'A clay handi pot for serving curd and yogurt. Its simple handcrafted style makes it a natural fit for everyday meals and traditional table settings.',
-      6: 'A terracotta water dispenser with a tap for convenient serving at home. Its generous form suits dining areas, kitchens, and get-togethers.',
-      7: 'A pack of four bamboo toothbrushes for a simple, everyday oral-care routine. A handy set for households looking to reduce disposable plastic bathroom items.',
-      8: 'A neem and bamboo comb set for everyday grooming. The natural materials and compact design make it easy to keep at home or carry while travelling.',
-      9: 'A handwoven bamboo lamp shade that adds warm, natural texture to a room. Pair it with a compatible light fitting to create a soft decorative accent.',
-      10: 'A handcrafted bamboo storage basket for organising household essentials. Its woven look brings practical storage and artisan character to shelves or living spaces.',
-      11: 'A set of six bamboo cooking utensils for everyday kitchen tasks. The lightweight pieces offer a natural-looking alternative to many synthetic utensils.',
-      12: 'A clay cooking handi pot for preparing and serving meals. Its classic shape brings traditional cookware style to the kitchen and dining table.'
-    };
-
-    async function loadProductsFromBackend() {
-      try {
-        allProducts = await apiRequest('/api/products');
-        renderProducts(allProducts);
-        const selectedProduct = new URLSearchParams(window.location.search).get('product');
-        if (selectedProduct) showProductDetails(Number(selectedProduct));
-      } catch (error) {
-        console.error("Backend se data lane me error aayi:", error);
-        document.getElementById('product-grid').innerHTML =
-          `<p class="col-span-full text-center text-red-600 text-xs">Product catalog load nahi hua: ${escapeHtml(error.message)}. Backend server chalu karke page refresh karein.</p>`;
-      }
-    }
-
-    function renderProducts(items) {
-      const grid = document.getElementById('product-grid');
-      if (items.length === 0) {
-        grid.innerHTML = `<p class="col-span-full text-center text-mutedGray text-xs">Koi product available nahi hai.</p>`;
-        return;
-      }
-
-      grid.innerHTML = items.map(p => `
-        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
-          <div>
-            <button type="button" onclick="showProductDetails(${p.id})" aria-label="View details for ${escapeHtml(p.name)}" class="overflow-hidden rounded-xl mb-3 h-56 w-full bg-stone-100 flex items-center justify-center p-3 cursor-pointer">
-              <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="max-h-full max-w-full object-contain rounded-lg group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-            </button>
-            <div class="mb-2">
-              <span class="text-[10px] uppercase tracking-widest text-classicGold font-bold bg-classicGold/10 px-2.5 py-1 rounded-md">${escapeHtml(p.category)}</span>
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="products.html" class="text-2xl font-bold text-green-700 flex items-center gap-2">
+                <i class="fa-solid fa-leaf"></i> GreenLifeStores
+            </a>
+            <nav class="hidden md:flex gap-6 font-medium text-gray-600">
+                <a href="products.html" class="text-green-600 font-semibold">Shop</a>
+                <a href="about.html" class="hover:text-green-600">About</a>
+                <a href="account.html" class="hover:text-green-600">Account</a>
+                <a href="admin.html" class="hover:text-green-600">Admin</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button onclick="openCartModal()" class="relative bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart <span id="cart-count" class="bg-white text-green-700 font-bold px-2 py-0.5 rounded-full text-xs">0</span>
+                </button>
             </div>
-            <h3 class="font-serif font-bold text-lg text-deepEmerald mt-1 leading-snug">
-              <button type="button" onclick="showProductDetails(${p.id})" class="text-left hover:text-classicGold focus-visible:underline">${escapeHtml(p.name)}</button>
-            </h3>
-          </div>
-          <div class="mt-5 border-t border-gray-100 pt-4 flex items-center justify-between">
-            <div>
-              <span class="text-[10px] text-mutedGray uppercase tracking-wider block">Price</span>
-              <span class="text-lg font-bold text-deepEmerald">₹${p.price}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <button type="button" onclick="showProductDetails(${p.id})" class="rounded-lg border border-deepEmerald px-3 py-2.5 text-xs font-semibold text-deepEmerald transition-colors hover:bg-champagne">View details</button>
-              <button type="button" onclick="addToCart(${p.id})" class="bg-deepEmerald hover:bg-classicGold text-white text-xs px-4 py-2.5 rounded-lg font-semibold tracking-wider transition-colors flex items-center gap-2 shadow-sm">
-                <i class="fa-solid fa-cart-plus"></i> Add
-              </button>
-            </div>
-          </div>
         </div>
-      `).join('');
-    }
+    </header>
 
-    function showProductDetails(id) {
-      const product = allProducts.find(item => item.id === id);
-      if (!product) {
-        alert('Product nahi mila. Collection refresh karke dobara try karein.');
-        return;
-      }
-      const description = product.description?.trim() || productDescriptions[product.id] ||
-        `A handmade ${product.category} product, selected for its practical everyday use and natural character. Contact us if you need more information before ordering.`;
-      document.getElementById('product-details-content').innerHTML = `
-        <div class="grid sm:grid-cols-2">
-          <div class="flex min-h-72 items-center justify-center bg-stone-100 p-6">
-            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="max-h-80 max-w-full rounded-xl object-contain" />
-          </div>
-          <div class="p-6 sm:p-8">
-            <div class="flex items-start justify-between gap-4">
-              <span class="rounded-md bg-classicGold/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-classicGold">${escapeHtml(product.category)}</span>
-              <button type="button" onclick="closeProductDetails()" aria-label="Close product details" class="text-2xl leading-none text-gray-500 hover:text-deepEmerald">&times;</button>
-            </div>
-            <h2 id="product-details-title" class="mt-4 font-serif text-3xl font-bold text-deepEmerald">${escapeHtml(product.name)}</h2>
-            <p class="mt-4 text-sm leading-relaxed text-gray-600">${escapeHtml(description)}</p>
-            <p class="mt-5 text-2xl font-bold text-deepEmerald">₹${Number(product.price).toLocaleString('en-IN')}</p>
-            <button type="button" onclick="addToCart(${product.id});" class="mt-6 w-full rounded-xl bg-deepEmerald px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-classicGold">
-              <i class="fa-solid fa-cart-plus mr-2"></i>Add to bag
-            </button>
-          </div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="bg-green-700 text-white rounded-2xl p-8 mb-8 text-center shadow-lg">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Sustainable & Eco-Friendly Living</h1>
+            <p class="text-green-100 max-w-xl mx-auto">Explore our collection of handcrafted terracotta, bamboo, and natural organic lifestyle products.</p>
         </div>
-      `;
-      document.getElementById('product-details').showModal();
-    }
 
-    function closeProductDetails() {
-      document.getElementById('product-details').close();
-    }
+        <!-- Category Filters -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="filterCategory('all')" class="category-btn active px-5 py-2 rounded-full bg-green-600 text-white font-medium shadow transition">All Products</button>
+            <button onclick="filterCategory('soil')" class="category-btn px-5 py-2 rounded-full bg-white text-gray-700 font-medium shadow hover:bg-green-100 transition">Clay & Soil</button>
+            <button onclick="filterCategory('care')" class="category-btn px-5 py-2 rounded-full bg-white text-gray-700 font-medium shadow hover:bg-green-100 transition">Personal Care</button>
+            <button onclick="filterCategory('decor')" class="category-btn px-5 py-2 rounded-full bg-white text-gray-700 font-medium shadow hover:bg-green-100 transition">Home Decor</button>
+            <button onclick="filterCategory('kitchen')" class="category-btn px-5 py-2 rounded-full bg-white text-gray-700 font-medium shadow hover:bg-green-100 transition">Kitchenware</button>
+        </div>
 
-    document.getElementById('product-details').addEventListener('click', event => {
-      if (event.target === event.currentTarget) closeProductDetails();
-    });
+        <!-- Products Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Dynamically Loaded Products -->
+        </div>
+    </main>
 
-    function filterProducts(cat, event) {
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('bg-deepEmerald', 'text-white');
-        btn.classList.add('bg-white', 'text-deepEmerald');
-      });
-      event.target.classList.remove('bg-white', 'text-deepEmerald');
-      event.target.classList.add('bg-deepEmerald', 'text-white');
+    <!-- Cart Drawer Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                <h2 class="text-xl font-bold text-gray-800"><i class="fa-solid fa-cart-shopping text-green-600 mr-2"></i> Your Shopping Cart</h2>
+                <button onclick="closeCartModal()" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+            </div>
+            
+            <div id="cart-items" class="flex-grow space-y-4 mb-4">
+                <!-- Cart items rendered dynamically -->
+            </div>
 
-      if (cat === 'all') {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter(p => p.category === cat);
-        renderProducts(filtered);
-      }
-    }
+            <div class="border-t pt-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total:</span>
+                    <span id="cart-total">₹0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition shadow">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
 
-    function addToCart(id) {
-      let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
-      let item = allProducts.find(p => p.id === id);
-      if (!item) {
-        alert("Product nahi mila. Collection refresh karke dobara try karein.");
-        return;
-      }
-      let existing = cart.find(i => i.id === id);
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-16 py-6 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 GreenLifeStores. All rights reserved. Built with FastAPI & Tailwind CSS.</p>
+    </footer>
 
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ ...item, qty: 1 });
-      }
+    <!-- JavaScript Application Logic -->
+    <script>
+        let allProducts = [];
+        let cart = JSON.parse(localStorage.getItem("greenlife_cart")) || [];
 
-      localStorage.setItem('greenCart', JSON.stringify(cart));
-      updateCartCount();
-      
-      // Direct cart page par redirect karne ke liye:
-      window.location.href = "cart.html";
-    }
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/products');
+                allProducts = await response.json();
+                displayProducts(allProducts);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        }
 
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
-      document.getElementById('cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
-    }
+        function displayProducts(products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            
+            if (products.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">No products found.</p>`;
+                return;
+            }
 
-    // Initial Load from Backend
-    loadProductsFromBackend();
-    updateCartCount();
-  </script>
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition flex flex-col">
+                        <div class="h-48 overflow-hidden bg-gray-100 flex items-center justify-center">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <span class="text-xs uppercase tracking-wider text-green-600 font-semibold mb-1">${p.category}</span>
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">${p.name}</h3>
+                            <p class="text-gray-600 text-sm mb-4 flex-grow">${p.description}</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="text-xl font-extrabold text-green-700">₹${p.price}</span>
+                                <button onclick="addToCart(${p.id})" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-green-700 transition shadow">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-green-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            event.target.classList.remove('bg-white', 'text-gray-700');
+            event.target.classList.add('bg-green-600', 'text-white');
+
+            if (category === 'all') {
+                displayProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(p => p.category === category);
+                displayProducts(filtered);
+            }
+        }
+
+        function addToCart(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            
+            saveCart();
+            updateCartUI();
+            openCartModal();
+        }
+
+        function saveCart() {
+            localStorage.setItem("greenlife_cart", JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const countElem = document.getElementById('cart-count');
+            const itemsElem = document.getElementById('cart-items');
+            const totalElem = document.getElementById('cart-total');
+
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            countElem.innerText = totalCount;
+
+            if (cart.length === 0) {
+                itemsElem.innerHTML = `<p class="text-gray-500 text-center py-8">Your cart is empty.</p>`;
+                totalElem.innerText = "₹0";
+                return;
+            }
+
+            itemsElem.innerHTML = '';
+            let totalAmount = 0;
+
+            cart.forEach((item, index) => {
+                totalAmount += item.price * item.qty;
+                itemsElem.innerHTML += `
+                    flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">${item.name}</h4>
+                            <p class="text-xs text-gray-500">₹${item.price} x ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty(${index}, -1)" class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">-</button>
+                            <span class="text-sm font-semibold">${item.qty}</span>
+                            <button onclick="changeQty(${index}, 1)" class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">+</button>
+                            <button onclick="removeItem(${index})" class="text-red-500 ml-2 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            totalElem.innerText = `₹${totalAmount}`;
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            saveCart();
+            updateCartUI();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartUI();
+        }
+
+        function openCartModal() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            updateCartUI();
+        }
+
+        function closeCartModal() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            window.location.href = "account.html";
+        }
+
+        window.onload = fetchProducts;
+    </script>
 </body>
 </html>
