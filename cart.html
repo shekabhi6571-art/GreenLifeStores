@@ -36,7 +36,7 @@
 
   <!-- TOP BANNER -->
   <div class="bg-deepEmerald text-classicGold text-xs py-2.5 px-4 text-center font-medium tracking-widest uppercase border-b border-classicGold/20">
-    <span>Free Shipping On Orders Above ₹500 &nbsp;•&nbsp; 100% Handcrafted & Plastic Free</span>
+    <span>Free Shipping On Orders Above ₹500 &nbsp;&bull;&nbsp; 100% Handcrafted & Plastic Free</span>
   </div>
 
   <!-- NAVIGATION HEADER -->
@@ -96,7 +96,7 @@
           
           <div class="rounded-xl border border-green-200 bg-green-50 p-4">
             <p class="font-bold text-deepEmerald text-sm"><i class="fa-solid fa-money-bill-wave mr-2 text-green-700"></i>Cash on Delivery (COD)</p>
-            <p class="text-[11px] text-mutedGray mt-1">Payment cash me delivery ke waqt karein. Online payment is not required.</p>
+            <p class="text-[11px] text-mutedGray mt-1">Pay with cash upon delivery. No online payment required.</p>
           </div>
 
           <!-- Promo Code Box -->
@@ -157,7 +157,7 @@
       </div>
     </div>
 
-    <!-- Recommended Section (Adds richness to the page) -->
+    <!-- Recommended Section -->
     <div class="mt-20 border-t pt-12">
       <h3 class="font-serif font-bold text-2xl text-deepEmerald text-center mb-2">Complete Your Sustainable Lifestyle</h3>
       <p class="text-xs text-mutedGray text-center mb-8">Pair your selection with our bestselling eco-friendly essentials.</p>
@@ -210,7 +210,7 @@
   <footer class="bg-deepEmerald text-white py-12 mt-16 border-t border-classicGold/20">
     <div class="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300 space-y-3">
       <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE ORGANICS</h3>
-      <p>© 2026 GreenLife Organics. Handcrafted with Care &bull; Plastic-Free Initiative.</p>
+      <p>&copy; 2026 GreenLife Organics. Handcrafted with Care &bull; Plastic-Free Initiative.</p>
     </div>
   </footer>
 
@@ -350,12 +350,12 @@
     async function checkout() {
       let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
       if (cart.length === 0) {
-        alert("Aapka bag khali hai!");
+        alert("Your shopping bag is empty!");
         return;
       }
       const address = document.getElementById('checkout-address').value.trim();
       if (address.length < 8) {
-        alert("Order ke liye apna poora delivery address bharein.");
+        alert("Please enter your complete delivery address.");
         return;
       }
 
@@ -369,7 +369,7 @@
       const customerName = document.getElementById('checkout-name').value.trim();
       const phone = document.getElementById('checkout-phone').value.trim();
       if (customerName.length < 2 || phone.length < 8) {
-        alert("Aapke account ki naam ya phone details load nahi hui. Page refresh karke dobara try karein.");
+        alert("Customer account details could not be loaded. Please refresh the page and try again.");
         return;
       }
 
@@ -385,7 +385,7 @@
             payment_method: 'COD'
           })
         });
-        alert(`COD order #${order.id} place ho gaya. Total ₹${order.total} delivery par cash me pay karein. Thank you!`);
+        alert(`COD order #${order.id} placed successfully! Please pay ₹${order.total} in cash upon delivery. Thank you!`);
         localStorage.removeItem('greenCart');
         discountApplied = false;
         document.getElementById('checkout-name').value = '';
@@ -394,7 +394,7 @@
         sessionStorage.removeItem('greenlifePendingDeliveryAddress');
         loadCart();
       } catch (error) {
-        alert(`Order backend me save nahi hua: ${error.message}. Aapka bag surakshit hai; dobara try karein.`);
+        alert(`Order could not be saved: ${error.message}. Your bag items are safe; please try again.`);
       }
     }
 
