@@ -1,13 +1,14 @@
 import os
 import httpx
-from typing import List, Optional
-from fastapi import FastAPI, HTTPException, Depends
+from typing import List
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 app = FastAPI(title="GreenLifeStores API")
 
-# CORS Middleware (Frontend communication ke liye)
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,10 +17,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Fast2SMS API Key Configuration (Environment variable se ya direct key)
 FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY", "YOUR_FAST2SMS_API_KEY_HERE")
 
-# --- Schemas ---
 class OrderItem(BaseModel):
     id: int
     name: str
@@ -35,14 +34,9 @@ class OrderCreate(BaseModel):
     total_amount: float
     items: List[OrderItem]
 
-# --- Helper Function: SMS Sender ---
 async def send_order_sms(phone_number: str, order_id: str, amount: str):
-    """Fast2SMS API ka use karke customer ko SMS bhejta hai."""
     url = "https://www.fast2sms.com/dev/bulkV2"
-    
-    # 10 digit Indian mobile number formatting
     clean_phone = "".join(filter(str.isdigit, phone_number))[-10:]
-    
     message = f"Thank you! Your order #{order_id} of Rs.{amount} has been placed successfully on GreenLifeStores."
     
     payload = {
@@ -53,7 +47,6 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
         "flash": 0,
         "numbers": clean_phone
     }
-    
     headers = {
         "authorization": FAST2SMS_API_KEY,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -62,18 +55,12 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(url, data=payload, headers=headers)
-            print(f"SMS Response: {response.json()}")
             return response.json()
         except Exception as e:
-            print(f"SMS Sending Failed: {e}")
+            print(f"SMS Error: {e}")
             return None
 
 # --- API Endpoints ---
-@app.get("/")
-def home():
-    return {"status": "success", "message": "GreenLifeStores API is running!"}
-
-# Sample Products Endpoint
 @app.get("/api/products")
 def get_products():
     return [
@@ -91,22 +78,13 @@ def get_products():
         {"id": 12, "name": "Clay Cooking Handi Pot", "category": "kitchen", "price": 549, "image": "https://via.placeholder.com/200"}
     ]
 
-# Checkout Endpoint (Jab order submit hota hai)
 @app.post("/api/checkout")
 async def checkout(order: OrderCreate):
     import random
     order_id = str(random.randint(100000, 999999))
-    
-    # SMS Trigger
     if order.phone:
-        await send_order_sms(
-            phone_number=order.phone,
-            order_id=order_id,
-            amount=str(order.total_amount)
-        )
-    
-    return {
-        "status": "success",
-        "order_id": order_id,
-        "message": "Order placed successfully and SMS sent!"
-    }
+        await send_order_sms(phone_number=order.phone, order_id=order_id, amount=str(order.total_amount))
+    return {"status": "success", "order_id": order_id, "message": "Order placed successfully!"}
+
+# --- Static Files Mount (Sabse Last Mein) ---
+app.mount("/", StaticFiles(directory=".", html=True), name="static")
