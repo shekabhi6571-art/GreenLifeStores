@@ -95,7 +95,7 @@ def get_products():
             "name": "Earthy Clay Water Bottle", 
             "category": "soil", 
             "price": 499, 
-            "image": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/clay-bottle-1.jpg", 
             "description": "A reusable clay water bottle for keeping drinking water fresh and naturally cool."
         },
         {
@@ -103,7 +103,7 @@ def get_products():
             "name": "Terracotta Travel Sipper Bottle", 
             "category": "soil", 
             "price": 599, 
-            "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Terracotta Travel Sipper Bottle.jpg", 
             "description": "A portable terracotta sipper bottle made for carrying water on commutes and travel."
         },
         {
@@ -111,7 +111,7 @@ def get_products():
             "name": "Warli Art Terracotta Bottle", 
             "category": "soil", 
             "price": 699, 
-            "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Hand-Painted Warli Art Clay Bottle.jpg", 
             "description": "A terracotta bottle decorated with traditional handcrafted art."
         },
         {
@@ -119,7 +119,7 @@ def get_products():
             "name": "Traditional Mitti Jug & Cup Set", 
             "category": "soil", 
             "price": 799, 
-            "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Traditional Mitti Jug & Cup Set.jpg", 
             "description": "A traditional mitti jug paired with clay cups for serving water at home."
         },
         {
@@ -127,7 +127,7 @@ def get_products():
             "name": "Handcrafted Clay Curd Handi", 
             "category": "soil", 
             "price": 349, 
-            "image": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Clay Curd & Yogurt Handi Pot.jpg", 
             "description": "A clay handi pot ideal for preparing and serving curd or yogurt."
         },
         {
@@ -135,7 +135,7 @@ def get_products():
             "name": "Terracotta Water Dispenser", 
             "category": "soil", 
             "price": 1299, 
-            "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Terracotta Water Matka Dispenser with Tap.jpg", 
             "description": "A terracotta water dispenser with tap for convenient household use."
         },
         {
@@ -143,7 +143,7 @@ def get_products():
             "name": "Bamboo Toothbrush Pack of 4", 
             "category": "care", 
             "price": 299, 
-            "image": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Bamboo Toothbrush (Pack of 4).jpg", 
             "description": "A pack of four eco-friendly bamboo toothbrushes for daily oral care."
         },
         {
@@ -151,7 +151,7 @@ def get_products():
             "name": "Neem & Bamboo Grooming Comb Set", 
             "category": "care", 
             "price": 249, 
-            "image": "https://images.unsplash.com/photo-1590159763121-7c9ff3121ef0?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Natural Neem & Bamboo Grooming Comb Set.jpg", 
             "description": "A natural neem and bamboo comb set for daily hair grooming."
         },
         {
@@ -159,7 +159,7 @@ def get_products():
             "name": "Handwoven Bamboo Lamp Shade", 
             "category": "decor", 
             "price": 899, 
-            "image": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Handwoven Bamboo Lamp Shade.jpg", 
             "description": "A handwoven bamboo lamp shade adding warmth and natural texture."
         },
         {
@@ -167,7 +167,7 @@ def get_products():
             "name": "Handcrafted Bamboo Storage Basket", 
             "category": "decor", 
             "price": 649, 
-            "image": "https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Handcrafted Bamboo Storage Basket.jpg", 
             "description": "A woven bamboo storage basket for home organization."
         },
         {
@@ -175,7 +175,7 @@ def get_products():
             "name": "Bamboo Cooking Utensils Set of 6", 
             "category": "kitchen", 
             "price": 499, 
-            "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Bamboo Cooking Utensils Set of 6.jpg", 
             "description": "A set of six lightweight bamboo cooking spoons and utensils."
         },
         {
@@ -183,7 +183,7 @@ def get_products():
             "name": "Clay Cooking Handi Pot", 
             "category": "kitchen", 
             "price": 549, 
-            "image": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80", 
+            "image": "images/Artisan Clay Cooking Handi Pot.jpg", 
             "description": "A traditional clay cooking pot for rustic home meals."
         }
     ]
@@ -240,9 +240,11 @@ async def checkout(order: OrderCreate):
     order_id = str(random.randint(100000, 999999))
     order_obj = {
         "id": order_id,
+        "customer_name": order.customer_name,
+        "phone": order.phone,
         "total": order.total_amount,
         "address": f"{order.address}, {order.city} - {order.pincode}",
-        "items": [{"quantity": i.qty, "name": i.name} for i in order.items],
+        "items": [{"quantity": i.qty, "name": i.name, "price": i.price} for i in order.items],
         "created_at": "2026-10-20T12:00:00"
     }
     fake_db["orders"].append(order_obj)
@@ -250,5 +252,5 @@ async def checkout(order: OrderCreate):
         await send_order_sms(phone_number=order.phone, order_id=order_id, amount=str(order.total_amount))
     return {"status": "success", "order_id": order_id, "message": "Order placed successfully!"}
 
-# --- Static Files Mount (Sabse Last Mein) ---
+# --- Static Files Mount ---
 app.mount("/", StaticFiles(directory=".", html=True), name="static")

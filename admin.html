@@ -1,480 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard | GreenLife Organics</title>
-  
-  <!-- Tailwind CSS & FontAwesome -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['Cormorant Garamond', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          colors: {
-            deepEmerald: '#0F2C23',
-            classicGold: '#C5A059',
-            champagne: '#F4EFEA',
-            softBeige: '#FAF8F5',
-            mutedGray: '#666666'
-          }
-        }
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | GreenLifeStores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-softBeige text-gray-900 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-  <!-- TOP BANNER -->
-  <div class="bg-deepEmerald text-classicGold text-xs py-2.5 px-4 text-center font-medium tracking-widest uppercase border-b border-classicGold/25">
-    <span>Admin Management Portal &nbsp;&bull;&nbsp; GreenLife Organics</span>
-  </div>
-
-  <!-- NAVIGATION HEADER -->
-  <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-100 shadow-sm">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3">
-        <div class="w-10 h-10 border border-classicGold flex items-center justify-center text-classicGold font-serif text-xl rounded-full">
-          G
+    <!-- Header -->
+    <header class="bg-gray-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="products.html" class="text-2xl font-bold text-green-400 flex items-center gap-2">
+                <i class="fa-solid fa-leaf"></i> GreenLife Admin
+            </a>
+            <nav class="flex gap-6 font-medium text-gray-300">
+                <a href="products.html" class="hover:text-green-400">View Store</a>
+                <a href="admin.html" class="text-green-400 font-semibold">Orders Dashboard</a>
+            </nav>
         </div>
-        <div>
-          <h1 class="text-2xl font-serif font-bold tracking-wider text-deepEmerald leading-none">GREENLIFE</h1>
-          <p class="text-[9px] uppercase tracking-[0.25em] text-classicGold font-semibold mt-1">Admin Dashboard</p>
-        </div>
-      </a>
+    </header>
 
-      <nav class="hidden md:flex items-center gap-6 lg:gap-8 font-medium text-xs tracking-widest uppercase text-gray-700 whitespace-nowrap">
-        <a href="index.html" class="hover:text-classicGold transition-colors">Home</a>
-        <a href="products.html" class="hover:text-classicGold transition-colors">Shop</a>
-        <a href="about.html" class="hover:text-classicGold transition-colors">About Us</a>
-        <a href="contact.html" class="hover:text-classicGold transition-colors">Contact</a>
-      </nav>
-
-      <a href="cart.html" class="relative flex items-center gap-2 text-deepEmerald font-medium text-xs tracking-wider uppercase bg-champagne px-4 py-2.5 rounded-full border border-gray-200 whitespace-nowrap">
-        <i class="fa-solid fa-bag-shopping text-classicGold"></i>
-        <span>Bag</span>
-        <span id="cart-count" class="bg-deepEmerald text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-      </a>
-    </div>
-  </header>
-
-  <main id="admin-login" class="py-16 px-6 max-w-md mx-auto w-full flex-grow">
-    <form id="admin-login-form" onsubmit="loginAdmin(event)" class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-5">
-      <div class="text-center space-y-2">
-        <i class="fa-solid fa-lock text-classicGold text-3xl"></i>
-        <h2 class="font-serif font-bold text-2xl text-deepEmerald">Admin Sign In</h2>
-        <p class="text-xs text-mutedGray">Enter the admin password you create when starting the website server. After signing in, use “Add New Product” to publish items to the Shop.</p>
-      </div>
-      <div class="space-y-2">
-        <label for="admin-password" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Admin password</label>
-        <input id="admin-password" type="password" required autocomplete="current-password" class="w-full text-sm px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
-      </div>
-      <p id="admin-login-error" class="hidden text-xs text-red-600" role="alert"></p>
-      <button type="submit" class="w-full bg-deepEmerald hover:bg-classicGold text-white text-xs py-3 rounded-xl font-semibold tracking-widest uppercase transition-colors">Sign In</button>
-      <a href="index.html" class="block text-center text-xs text-mutedGray underline">Back to store</a>
-    </form>
-  </main>
-
-  <!-- ADMIN CONTENT -->
-  <section id="admin-dashboard" class="hidden py-12 px-6 max-w-7xl mx-auto w-full flex-grow space-y-10">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-6">
-      <div>
-        <h2 class="text-3xl font-serif font-bold text-deepEmerald">Inventory & Orders Management</h2>
-        <p class="text-xs text-mutedGray mt-1">Manage products, saved orders and customer inquiries.</p>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="resetDefaultData()" class="bg-gray-100 hover:bg-gray-200 text-deepEmerald text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors">Reset Default Products</button>
-        <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors">Sign Out</button>
-      </div>
-    </div>
-
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-2">
-        <p class="text-xs uppercase tracking-wider text-mutedGray font-semibold">Total Products</p>
-        <h3 id="stat-products-count" class="text-3xl font-serif font-bold text-deepEmerald">0</h3>
-      </div>
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-2">
-        <p class="text-xs uppercase tracking-wider text-mutedGray font-semibold">Saved Orders</p>
-        <h3 id="stat-orders-count" class="text-3xl font-serif font-bold text-deepEmerald">0</h3>
-      </div>
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-2">
-        <p class="text-xs uppercase tracking-wider text-mutedGray font-semibold">System Status</p>
-        <h3 id="system-status" class="text-2xl font-serif font-bold text-gray-500">Checking...</h3>
-      </div>
-    </div>
-
-    <!-- Add Product Form & Product List Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-      
-      <!-- Add Product Form -->
-      <div class="bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6 h-fit">
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Add New Product</h3>
-        
-        <form id="add-product-form" onsubmit="addNewProduct(event)" class="space-y-4">
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Product Name</label>
-            <input type="text" id="p-name" required placeholder="e.g. Terracotta Water Jug" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
-          </div>
-
-          <div class="space-y-1.5">
-            <label class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Price (INR)</label>
-            <input type="number" id="p-price" required min="1" step="0.01" placeholder="599" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
-          </div>
-
-          <div class="space-y-1.5">
-            <label for="p-image-file" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Product photo (PNG, JPG, or WebP; up to 2 MB)</label>
-            <input type="file" id="p-image-file" accept="image/png,image/jpeg,image/webp" class="w-full text-xs file:mr-3 file:rounded-lg file:border-0 file:bg-gray-100 file:px-3 file:py-2" />
-            <img id="p-image-preview" alt="Product photo preview" class="hidden max-h-36 rounded-lg border border-gray-100 object-contain" />
-            <label for="p-image" class="block pt-1 text-[10px] text-mutedGray">Or use an existing image path from the images folder</label>
-            <input type="text" id="p-image" placeholder="images/filename.jpg" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold" />
-          </div>
-
-          <div class="space-y-1.5">
-            <label for="p-category" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Category</label>
-            <select id="p-category" class="w-full text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold bg-white">
-              <option value="soil">Soil & Clay</option>
-              <option value="care">Bamboo Care</option>
-              <option value="decor">Decor</option>
-              <option value="kitchen">Kitchen</option>
-            </select>
-          </div>
-
-          <div class="space-y-1.5">
-            <label for="p-description" class="text-xs font-semibold uppercase tracking-wider text-deepEmerald">Product description</label>
-            <textarea id="p-description" required minlength="20" maxlength="2000" rows="3" placeholder="Describe the product so customers can read it before ordering." class="w-full resize-y text-xs px-3.5 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-classicGold"></textarea>
-          </div>
-
-          <p id="product-form-message" role="status" class="hidden rounded-lg p-3 text-xs"></p>
-          <button type="submit" class="w-full bg-deepEmerald hover:bg-classicGold text-white text-xs py-3 rounded-xl font-semibold tracking-widest uppercase transition-colors shadow-sm">
-            Save Product
-          </button>
-        </form>
-      </div>
-
-      <!-- Existing Products Management Table -->
-      <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Manage Current Inventory</h3>
-        
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b text-xs uppercase tracking-wider text-mutedGray">
-                <th class="py-3 px-2">Item</th>
-                <th class="py-3 px-2">Category</th>
-                <th class="py-3 px-2">Price</th>
-                <th class="py-3 px-2 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-product-list" class="text-xs divide-y">
-              <!-- JS rendered products -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Saved Orders</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead><tr class="border-b text-xs uppercase tracking-wider text-mutedGray">
-              <th class="py-3 px-2">Order</th><th class="py-3 px-2">Customer</th><th class="py-3 px-2">Delivery Address</th><th class="py-3 px-2">Items</th><th class="py-3 px-2">Payment</th><th class="py-3 px-2">Total</th>
-            </tr></thead>
-            <tbody id="admin-order-list" class="text-xs divide-y"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Customer Inquiries</h3>
-        <div id="admin-inquiry-list" class="space-y-3 text-xs"></div>
-      </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-      <div>
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Seller Product Submissions</h3>
-        <p class="mt-2 text-[11px] text-mutedGray">Only approved products appear in the public Shop.</p>
-      </div>
-      <div id="admin-product-submissions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
-    </div>
-
-    <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-      <div>
-        <h3 class="font-serif font-bold text-xl text-deepEmerald border-b pb-3">Customer Accounts</h3>
-        <p class="mt-2 text-[11px] text-mutedGray">Marketing updates are only for customers who opted in.</p>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead><tr class="border-b text-xs uppercase tracking-wider text-mutedGray">
-            <th class="py-3 px-2">Customer</th><th class="py-3 px-2">Gmail</th><th class="py-3 px-2">Phone</th><th class="py-3 px-2">Marketing consent</th>
-          </tr></thead>
-          <tbody id="admin-customer-list" class="text-xs divide-y"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="bg-deepEmerald text-white py-12 mt-16 border-t border-classicGold/20">
-    <div class="max-w-7xl mx-auto px-6 text-center text-xs text-gray-300 space-y-3">
-      <h3 class="font-serif text-xl text-classicGold font-bold tracking-wider">GREENLIFE ORGANICS</h3>
-      <p>&copy; 2026 GreenLife Organics. Admin Portal &bull; Plastic-Free Initiative.</p>
-    </div>
-  </footer>
-
-  <script src="api.js"></script>
-  <!-- ADMIN JAVASCRIPT -->
-  <script>
-    let selectedProductImage = '';
-
-    document.getElementById('p-image-file').addEventListener('change', event => {
-      const file = event.target.files[0];
-      const preview = document.getElementById('p-image-preview');
-      selectedProductImage = '';
-      preview.classList.add('hidden');
-      if (!file) return;
-      if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 2 * 1024 * 1024) {
-        event.target.value = '';
-        showProductFormMessage('Choose a PNG, JPG, or WebP image smaller than 2 MB.', true);
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        selectedProductImage = String(reader.result);
-        preview.src = selectedProductImage;
-        preview.classList.remove('hidden');
-      };
-      reader.onerror = () => showProductFormMessage('Could not read that image. Please try another file.', true);
-      reader.readAsDataURL(file);
-    });
-
-    function showProductFormMessage(message, isError) {
-      const element = document.getElementById('product-form-message');
-      element.innerText = message;
-      element.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-green-50', 'text-green-700');
-      element.classList.add(isError ? 'bg-red-50' : 'bg-green-50', isError ? 'text-red-700' : 'text-green-700');
-    }
-
-    async function showAdminDashboard() {
-      document.getElementById('admin-login').classList.add('hidden');
-      document.getElementById('admin-dashboard').classList.remove('hidden');
-      await renderAdminPanel();
-    }
-
-    async function checkAdminSession() {
-      try {
-        const session = await apiRequest('/api/admin/session');
-        if (session.authenticated) {
-          await showAdminDashboard();
-        }
-      } catch (error) {
-        console.error("Admin session check failed:", error);
-        showLoginError(`Admin login check failed: ${error.message}`);
-      }
-    }
-
-    function showLoginError(message) {
-      const errorBox = document.getElementById('admin-login-error');
-      errorBox.innerText = message;
-      errorBox.classList.remove('hidden');
-    }
-
-    async function loginAdmin(event) {
-      event.preventDefault();
-      const passwordInput = document.getElementById('admin-password');
-      try {
-        await apiRequest('/api/admin/login', {
-          method: 'POST',
-          body: JSON.stringify({ password: passwordInput.value })
-        });
-        passwordInput.value = '';
-        await showAdminDashboard();
-      } catch (error) {
-        showLoginError(error.message);
-      }
-    }
-
-    async function logoutAdmin() {
-      try {
-        await apiRequest('/api/admin/logout', { method: 'POST' });
-        document.getElementById('admin-dashboard').classList.add('hidden');
-        document.getElementById('admin-login').classList.remove('hidden');
-      } catch (error) {
-        alert(`Sign out nahi hua: ${error.message}`);
-      }
-    }
-
-    async function renderAdminPanel() {
-      const [products, orders, inquiries, customers, submissions] = await Promise.all([
-        apiRequest('/api/products'),
-        apiRequest('/api/orders'),
-        apiRequest('/api/inquiries'),
-        apiRequest('/api/admin/customers'),
-        apiRequest('/api/admin/product-submissions')
-      ]);
-      let cart = JSON.parse(localStorage.getItem('greenCart')) || [];
-      
-      document.getElementById('stat-products-count').innerText = products.length;
-      document.getElementById('stat-orders-count').innerText = orders.length;
-      document.getElementById('cart-count').innerText = cart.reduce((acc, i) => acc + i.qty, 0);
-      document.getElementById('system-status').innerText = 'Connected / Saved';
-      document.getElementById('system-status').classList.remove('text-gray-500');
-      document.getElementById('system-status').classList.add('text-green-600');
-
-      const tbody = document.getElementById('admin-product-list');
-      if (products.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-mutedGray">No products available in inventory.</td></tr>`;
-      } else {
-        tbody.innerHTML = products.map(p => `
-          <tr class="hover:bg-gray-50/50">
-            <td class="py-3 px-2 flex items-center gap-3">
-              <div class="w-10 h-10 bg-gray-50 rounded-lg border overflow-hidden flex items-center justify-center p-0.5 flex-shrink-0">
-                <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" class="w-full h-full object-contain" />
-              </div>
-              <span class="font-serif font-bold text-deepEmerald">${escapeHtml(p.name)}</span>
-            </td>
-            <td class="py-3 px-2 text-mutedGray">${escapeHtml(p.category)}</td>
-            <td class="py-3 px-2 font-semibold text-deepEmerald">₹${p.price}</td>
-            <td class="py-3 px-2 text-right">
-              <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-600 px-2 py-1 transition-colors"><i class="fa-solid fa-trash"></i></button>
-            </td>
-          </tr>
-        `).join('');
-      }
-
-      document.getElementById('admin-order-list').innerHTML = orders.length
-        ? orders.map(order => `
-          <tr>
-            <td class="py-3 px-2">#${order.id}<span class="block text-[10px] text-mutedGray">${escapeHtml(new Date(order.created_at).toLocaleDateString())}</span></td>
-            <td class="py-3 px-2">${escapeHtml(order.customer_name)}<span class="block text-[10px] text-mutedGray">${escapeHtml(order.phone)}</span></td>
-            <td class="py-3 px-2">${escapeHtml(order.address)}</td>
-            <td class="py-3 px-2">${order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
-            <td class="py-3 px-2">Cash on Delivery</td>
-            <td class="py-3 px-2 font-semibold">₹${order.total}</td>
-          </tr>
-        `).join('')
-        : `<tr><td colspan="6" class="py-5 text-center text-mutedGray">No orders saved yet.</td></tr>`;
-
-      document.getElementById('admin-inquiry-list').innerHTML = inquiries.length
-        ? inquiries.map(inquiry => `
-          <article class="border-b border-gray-100 pb-3">
-            <p class="font-semibold text-deepEmerald">${escapeHtml(inquiry.subject)} — ${escapeHtml(inquiry.name)}</p>
-            <p class="text-mutedGray">${escapeHtml(inquiry.email)}</p>
-            <p class="mt-1 whitespace-pre-wrap">${escapeHtml(inquiry.message)}</p>
-          </article>
-        `).join('')
-        : `<p class="text-mutedGray">No inquiries saved yet.</p>`;
-
-      document.getElementById('admin-customer-list').innerHTML = customers.length
-        ? customers.map(customer => `
-          <tr>
-            <td class="py-3 px-2 font-semibold text-deepEmerald">${escapeHtml(customer.name)}</td>
-            <td class="py-3 px-2">${escapeHtml(customer.email)}</td>
-            <td class="py-3 px-2">${escapeHtml(customer.phone)}</td>
-            <td class="py-3 px-2">${customer.marketing_consent ? 'Opted in' : 'No consent'}</td>
-          </tr>
-        `).join('')
-        : `<tr><td colspan="4" class="py-5 text-center text-mutedGray">No customer accounts yet.</td></tr>`;
-
-      const pendingSubmissions = submissions.filter(submission => submission.status === 'pending');
-      document.getElementById('admin-product-submissions').innerHTML = pendingSubmissions.length
-        ? pendingSubmissions.map(submission => `
-          <article class="overflow-hidden rounded-xl border border-gray-100">
-            <img src="${escapeHtml(submission.image)}" alt="${escapeHtml(submission.name)}" class="h-48 w-full bg-gray-50 object-contain p-3" />
-            <div class="space-y-2 p-4 text-xs">
-              <h4 class="font-serif text-lg font-bold text-deepEmerald">${escapeHtml(submission.name)}</h4>
-              <p>₹${submission.price} · ${escapeHtml(submission.category)}</p>
-              <p class="text-gray-600">Seller: ${escapeHtml(submission.seller_name)}</p>
-              <p class="text-gray-600">${escapeHtml(submission.seller_email)} · ${escapeHtml(submission.seller_phone)}</p>
-              <p class="text-[10px] text-mutedGray">Submitted ${escapeHtml(new Date(submission.submitted_at).toLocaleString())}</p>
-              <div class="flex gap-2 pt-2">
-                <button onclick="reviewProductSubmission(${submission.id}, 'approve')" class="flex-1 rounded-lg bg-deepEmerald px-3 py-2 font-semibold text-white hover:bg-green-800">Approve & Publish</button>
-                <button onclick="reviewProductSubmission(${submission.id}, 'reject')" class="rounded-lg bg-red-50 px-3 py-2 font-semibold text-red-700 hover:bg-red-100">Reject</button>
-              </div>
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800"><i class="fa-solid fa-list-check text-green-600 mr-2"></i> All Customer Orders</h1>
+                <button onclick="fetchAdminOrders()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700"><i class="fa-solid fa-rotate mr-1"></i> Refresh</button>
             </div>
-          </article>
-        `).join('')
-        : `<p class="col-span-full py-5 text-center text-xs text-mutedGray">No pending seller submissions.</p>`;
-    }
 
-    async function reviewProductSubmission(id, decision) {
-      const action = decision === 'approve' ? 'approve' : 'reject';
-      const confirmation = decision === 'approve'
-        ? 'Approve this product and publish it in the Shop?'
-        : 'Reject this seller product submission?';
-      if (!confirm(confirmation)) return;
-      try {
-        await apiRequest(`/api/admin/product-submissions/${id}/${action}`, { method: 'POST' });
-        await renderAdminPanel();
-        alert(decision === 'approve' ? 'Product approved and published.' : 'Product submission rejected.');
-      } catch (error) {
-        alert(`Submission review failed: ${error.message}`);
-      }
-    }
+            <div id="admin-orders-list" class="space-y-4">
+                <p class="text-gray-500 text-center py-8">Loading live orders...</p>
+            </div>
+        </div>
+    </main>
 
-    async function addNewProduct(event) {
-      event.preventDefault();
-      const imagePath = document.getElementById('p-image').value.trim();
-      if (!selectedProductImage && !imagePath) {
-        showProductFormMessage('Choose a product photo or enter an existing image path.', true);
-        return;
-      }
-      const newProduct = {
-        name: document.getElementById('p-name').value.trim(),
-        price: Number(document.getElementById('p-price').value),
-        image: imagePath || 'images/admin-product-upload.jpg',
-        image_data: selectedProductImage || null,
-        category: document.getElementById('p-category').value,
-        description: document.getElementById('p-description').value.trim()
-      };
+    <script>
+        async function fetchAdminOrders() {
+            try {
+                const response = await fetch('/api/customer/orders');
+                const orders = await response.json();
+                const container = document.getElementById('admin-orders-list');
 
-      try {
-        await apiRequest('/api/products', { method: 'POST', body: JSON.stringify(newProduct) });
-        document.getElementById('add-product-form').reset();
-        selectedProductImage = '';
-        document.getElementById('p-image-preview').src = '';
-        document.getElementById('p-image-preview').classList.add('hidden');
-        await renderAdminPanel();
-        showProductFormMessage('Product saved and published in the Shop.', false);
-      } catch (error) {
-        showProductFormMessage(`Product save nahi hua: ${error.message}`, true);
-      }
-    }
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = `<p class="text-gray-500 text-center py-8">No customer orders recorded yet.</p>`;
+                    return;
+                }
 
-    async function deleteProduct(id) {
-      if (!confirm("Delete this product from the saved inventory?")) return;
-      try {
-        await apiRequest(`/api/products/${id}`, { method: 'DELETE' });
-        await renderAdminPanel();
-      } catch (error) {
-        alert(`Product delete nahi hua: ${error.message}`);
-      }
-    }
+                container.innerHTML = orders.slice().reverse().map(order => `
+                    <div class="border border-gray-200 p-5 rounded-xl bg-gray-50 shadow-sm">
+                        <div class="flex flex-wrap justify-between items-center border-b border-gray-300 pb-3 mb-3">
+                            <div>
+                                <span class="font-bold text-gray-800 text-lg">Order ID: #${order.id}</span>
+                                <p class="text-xs text-gray-500">Customer Name: <strong>${order.customer_name || 'N/A'}</strong> | Phone: <strong>${order.phone || 'N/A'}</strong></p>
+                            </div>
+                            <span class="text-xl font-extrabold text-green-700">Total: ₹${order.total}</span>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3"><strong>Shipping Address:</strong> ${order.address}</p>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-bold text-xs uppercase text-gray-500 mb-2">Purchased Items:</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                                ${order.items.map(i => `
+                                    <div class="bg-green-50 p-2 rounded border border-green-100 flex justify-between">
+                                        <span>${i.name}</span>
+                                        <span class="font-bold text-green-800">x${i.quantity}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error("Error fetching admin orders:", err);
+            }
+        }
 
-    async function resetDefaultData() {
-      if (!confirm("Replace the saved inventory with the 12 default products?")) return;
-      try {
-        await apiRequest('/api/products/reset', { method: 'POST' });
-        await renderAdminPanel();
-        alert("Backend inventory restored to default products.");
-      } catch (error) {
-        alert(`Inventory reset nahi hua: ${error.message}`);
-      }
-    }
-
-    checkAdminSession();
-  </script>
+        window.onload = fetchAdminOrders;
+    </script>
 </body>
 </html>
