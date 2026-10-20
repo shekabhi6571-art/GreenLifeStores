@@ -195,7 +195,7 @@
             <h2 id="product-details-title" class="mt-4 font-serif text-3xl font-bold text-deepEmerald">${escapeHtml(product.name)}</h2>
             <p class="mt-4 text-sm leading-relaxed text-gray-600">${escapeHtml(description)}</p>
             <p class="mt-5 text-2xl font-bold text-deepEmerald">₹${Number(product.price).toLocaleString('en-IN')}</p>
-            <button type="button" onclick="addToCart(${product.id}); closeProductDetails();" class="mt-6 w-full rounded-xl bg-deepEmerald px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-classicGold">
+            <button type="button" onclick="addToCart(${product.id});" class="mt-6 w-full rounded-xl bg-deepEmerald px-5 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-classicGold">
               <i class="fa-solid fa-cart-plus mr-2"></i>Add to bag
             </button>
           </div>
@@ -245,7 +245,9 @@
 
       localStorage.setItem('greenCart', JSON.stringify(cart));
       updateCartCount();
-      alert(`"${item.name}" Bag me add ho gaya hai!`);
+      
+      // Direct cart page par redirect karne ke liye:
+      window.location.href = "cart.html";
     }
 
     function updateCartCount() {
