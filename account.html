@@ -59,7 +59,7 @@
             <input id="marketing-consent" type="checkbox" class="mt-0.5 accent-deepEmerald" />
             <span>I agree to receive occasional GreenLife product and offer updates. This is optional and can be changed later.</span>
           </label>
-          <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Create account</button>
+          <button type="submit" class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Create account</button>
         </form>
 
         <form id="login-form" class="hidden space-y-4" onsubmit="loginCustomer(event)">
@@ -69,17 +69,17 @@
           <label class="block text-xs font-semibold text-deepEmerald">Password
             <input id="login-password" required type="password" autocomplete="current-password" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-sm font-normal" />
           </label>
-          <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Sign in</button>
+          <button type="submit" class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-classicGold">Sign in</button>
         </form>
 
         <section id="otp-panel" class="mt-5 hidden rounded-xl border border-amber-300 bg-amber-50 p-4">
           <p class="font-semibold text-amber-950">Check your phone for the SMS code</p>
           <p class="mt-1 text-xs leading-relaxed text-amber-900">Enter the 6-digit verification code sent to your mobile number.</p>
-          <form class="space-y-3" onsubmit="verifyOtp(event)">
+          <form class="space-y-3 mt-3" onsubmit="verifyOtp(event)">
             <label class="block text-xs font-semibold text-deepEmerald">Enter the 6-digit SMS code
               <input id="otp-code" required inputmode="numeric" pattern="[0-9]{6}" maxlength="6" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-3 text-center font-mono text-lg tracking-widest" />
             </label>
-            <button class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white">Verify SMS code</button>
+            <button type="submit" class="w-full rounded-xl bg-deepEmerald py-3 text-xs font-semibold uppercase tracking-widest text-white">Verify SMS code</button>
           </form>
           <button type="button" onclick="requestOtp(null)" class="mt-3 text-xs font-semibold text-deepEmerald underline">Send another SMS code (60-second cooldown)</button>
         </section>
@@ -93,7 +93,7 @@
             <h2 id="customer-name" class="font-serif text-2xl font-bold text-deepEmerald"></h2>
             <p id="customer-details" class="mt-1 text-xs text-gray-500"></p>
           </div>
-          <button onclick="logoutCustomer()" class="rounded-lg border border-gray-200 px-4 py-2 text-xs font-semibold">Sign out</button>
+          <button type="button" onclick="logoutCustomer()" class="rounded-lg border border-gray-200 px-4 py-2 text-xs font-semibold">Sign out</button>
         </div>
         <label class="mt-5 flex items-start gap-2 text-xs leading-relaxed text-gray-600">
           <input id="saved-marketing-consent" type="checkbox" onchange="saveConsent()" class="mt-0.5 accent-deepEmerald" />
@@ -141,7 +141,7 @@
         });
         pendingPhone = document.getElementById('register-phone').value.trim();
         document.getElementById('otp-panel').classList.remove('hidden');
-        showMessage(result.message, false);
+        showMessage(result.message || "OTP sent successfully!", false);
       } catch (error) {
         showMessage(error.message);
       }
@@ -187,21 +187,25 @@
     }
 
     async function loadCustomerAccount() {
-      const session = await apiRequest('/api/customer/session');
-      if (!session.authenticated) return;
-      document.getElementById('auth-forms').classList.add('hidden');
-      document.getElementById('customer-area').classList.remove('hidden');
-      document.getElementById('customer-name').innerText = session.customer.name;
-      document.getElementById('customer-details').innerText = `${session.customer.email} · ${session.customer.phone}`;
-      document.getElementById('saved-marketing-consent').checked = session.customer.marketing_consent;
-      const orders = await apiRequest('/api/customer/orders');
-      document.getElementById('customer-orders').innerHTML = orders.length
-        ? orders.map(order => `<article class="rounded-xl border border-gray-100 p-4 text-sm">
-            <div class="flex justify-between gap-3 font-semibold text-deepEmerald"><span>Order #${order.id}</span><span>₹${order.total} · COD</span></div>
-            <p class="mt-1 text-xs text-gray-500">${escapeHtml(new Date(order.created_at).toLocaleString())} · ${order.items.reduce((sum, item) => sum + item.quantity, 0)} item(s)</p>
-            <p class="mt-1 text-xs text-gray-600">${escapeHtml(order.address)}</p>
-          </article>`).join('')
-        : '<p class="py-5 text-sm text-gray-500">No orders yet. Your future COD orders will appear here.</p>';
+      try {
+        const session = await apiRequest('/api/customer/session');
+        if (!session.authenticated) return;
+        document.getElementById('auth-forms').classList.add('hidden');
+        document.getElementById('customer-area').classList.remove('hidden');
+        document.getElementById('customer-name').innerText = session.customer.name;
+        document.getElementById('customer-details').innerText = `${session.customer.email} · ${session.customer.phone}`;
+        document.getElementById('saved-marketing-consent').checked = session.customer.marketing_consent;
+        const orders = await apiRequest('/api/customer/orders');
+        document.getElementById('customer-orders').innerHTML = orders.length
+          ? orders.map(order => `<article class="rounded-xl border border-gray-100 p-4 text-sm">
+              <div class="flex justify-between gap-3 font-semibold text-deepEmerald"><span>Order #${order.id}</span><span>₹${order.total} · COD</span></div>
+              <p class="mt-1 text-xs text-gray-500">${escapeHtml(new Date(order.created_at).toLocaleString())} · ${order.items.reduce((sum, item) => sum + item.quantity, 0)} item(s)</p>
+              <p class="mt-1 text-xs text-gray-600">${escapeHtml(order.address)}</p>
+            </article>`).join('')
+          : '<p class="py-5 text-sm text-gray-500">No orders yet. Your future COD orders will appear here.</p>';
+      } catch (e) {
+        // Not logged in or session endpoint not active yet
+      }
     }
 
     async function saveConsent() {
@@ -225,7 +229,7 @@
       }
     }
 
-    loadCustomerAccount().catch(error => showMessage(`Could not load account: ${error.message}`));
+    loadCustomerAccount();
   </script>
 </body>
 </html>
