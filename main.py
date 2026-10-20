@@ -19,7 +19,7 @@ app.add_middleware(
 
 FAST2SMS_API_KEY = os.getenv("FAST2SMS_API_KEY", "YOUR_FAST2SMS_API_KEY_HERE")
 
-# In-memory storage for demo session and orders
+# In-memory storage
 fake_db = {
     "current_customer": None,
     "pending_customer": None,
@@ -86,7 +86,7 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
             print(f"SMS Error: {e}")
             return None
 
-# --- Products API ---
+# --- Products API with Exact Original Image Filenames ---
 @app.get("/api/products")
 def get_products():
     return [
@@ -100,7 +100,7 @@ def get_products():
         },
         {
             "id": 2, 
-            "name": "Terracotta Travel Sipper Bottle", 
+            "name": "Terracotta Travel Sipper", 
             "category": "soil", 
             "price": 599, 
             "image": "images/Terracotta Travel Sipper Bottle.jpg", 
@@ -148,7 +148,7 @@ def get_products():
         },
         {
             "id": 8, 
-            "name": "Neem & Bamboo Grooming Comb Set", 
+            "name": "Neem & Bamboo Comb Set", 
             "category": "care", 
             "price": 249, 
             "image": "images/Natural Neem & Bamboo Grooming Comb Set.jpg", 
@@ -164,7 +164,7 @@ def get_products():
         },
         {
             "id": 10, 
-            "name": "Handcrafted Bamboo Storage Basket", 
+            "name": "Bamboo Storage Basket", 
             "category": "decor", 
             "price": 649, 
             "image": "images/Handcrafted Bamboo Storage Basket.jpg", 
@@ -172,7 +172,7 @@ def get_products():
         },
         {
             "id": 11, 
-            "name": "Bamboo Cooking Utensils Set of 6", 
+            "name": "Bamboo Utensils Set of 6", 
             "category": "kitchen", 
             "price": 499, 
             "image": "images/Bamboo Cooking Utensils Set of 6.jpg", 
@@ -188,12 +188,12 @@ def get_products():
         }
     ]
 
-# --- Customer Authentication & Account APIs ---
+# --- Customer Authentication APIs ---
 @app.post("/api/customer/register")
 async def customer_register(data: CustomerRegisterSchema):
     fake_db["pending_customer"] = data.dict()
     fake_db["otp_store"][data.phone] = "123456"
-    return {"status": "success", "message": "OTP sent to your phone successfully! (Demo OTP: 123456)"}
+    return {"status": "success", "message": "OTP sent successfully! (Demo OTP: 123456)"}
 
 @app.post("/api/customer/verify-otp")
 async def verify_otp(data: OtpVerifySchema):
