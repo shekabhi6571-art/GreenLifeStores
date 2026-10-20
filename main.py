@@ -90,25 +90,109 @@ async def send_order_sms(phone_number: str, order_id: str, amount: str):
 @app.get("/api/products")
 def get_products():
     return [
-        {"id": 1, "name": "Earthy Clay Water Bottle", "category": "soil", "price": 499, "image": "https://via.placeholder.com/200", "description": "A reusable clay water bottle..."},
-        {"id": 2, "name": "Terracotta Travel Sipper Bottle", "category": "soil", "price": 599, "image": "https://via.placeholder.com/200", "description": "A portable terracotta sipper..."},
-        {"id": 3, "name": "Warli Art Terracotta Bottle", "category": "soil", "price": 699, "image": "https://via.placeholder.com/200", "description": "A terracotta bottle decorated..."},
-        {"id": 4, "name": "Traditional Mitti Jug & Cup Set", "category": "soil", "price": 799, "image": "https://via.placeholder.com/200", "description": "A traditional mitti jug..."},
-        {"id": 5, "name": "Handcrafted Clay Curd Handi", "category": "soil", "price": 349, "image": "https://via.placeholder.com/200", "description": "A clay handi pot..."},
-        {"id": 6, "name": "Terracotta Water Dispenser", "category": "soil", "price": 1299, "image": "https://via.placeholder.com/200", "description": "A terracotta water dispenser..."},
-        {"id": 7, "name": "Bamboo Toothbrush Pack of 4", "category": "care", "price": 299, "image": "https://via.placeholder.com/200", "description": "A pack of four bamboo toothbrushes..."},
-        {"id": 8, "name": "Neem & Bamboo Grooming Comb Set", "category": "care", "price": 249, "image": "https://via.placeholder.com/200", "description": "A neem and bamboo comb set..."},
-        {"id": 9, "name": "Handwoven Bamboo Lamp Shade", "category": "decor", "price": 899, "image": "https://via.placeholder.com/200", "description": "A handwoven bamboo lamp shade..."},
-        {"id": 10, "name": "Handcrafted Bamboo Storage Basket", "category": "decor", "price": 649, "image": "https://via.placeholder.com/200", "description": "A handcrafted bamboo storage basket..."},
-        {"id": 11, "name": "Bamboo Cooking Utensils Set of 6", "category": "kitchen", "price": 499, "image": "https://via.placeholder.com/200", "description": "A set of six bamboo cooking utensils..."},
-        {"id": 12, "name": "Clay Cooking Handi Pot", "category": "kitchen", "price": 549, "image": "https://via.placeholder.com/200", "description": "A clay cooking handi pot..."}
+        {
+            "id": 1, 
+            "name": "Earthy Clay Water Bottle", 
+            "category": "soil", 
+            "price": 499, 
+            "image": "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=600&q=80", 
+            "description": "A reusable clay water bottle for keeping drinking water fresh and naturally cool."
+        },
+        {
+            "id": 2, 
+            "name": "Terracotta Travel Sipper Bottle", 
+            "category": "soil", 
+            "price": 599, 
+            "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80", 
+            "description": "A portable terracotta sipper bottle made for carrying water on commutes and travel."
+        },
+        {
+            "id": 3, 
+            "name": "Warli Art Terracotta Bottle", 
+            "category": "soil", 
+            "price": 699, 
+            "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80", 
+            "description": "A terracotta bottle decorated with traditional handcrafted art."
+        },
+        {
+            "id": 4, 
+            "name": "Traditional Mitti Jug & Cup Set", 
+            "category": "soil", 
+            "price": 799, 
+            "image": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80", 
+            "description": "A traditional mitti jug paired with clay cups for serving water at home."
+        },
+        {
+            "id": 5, 
+            "name": "Handcrafted Clay Curd Handi", 
+            "category": "soil", 
+            "price": 349, 
+            "image": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80", 
+            "description": "A clay handi pot ideal for preparing and serving curd or yogurt."
+        },
+        {
+            "id": 6, 
+            "name": "Terracotta Water Dispenser", 
+            "category": "soil", 
+            "price": 1299, 
+            "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", 
+            "description": "A terracotta water dispenser with tap for convenient household use."
+        },
+        {
+            "id": 7, 
+            "name": "Bamboo Toothbrush Pack of 4", 
+            "category": "care", 
+            "price": 299, 
+            "image": "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?auto=format&fit=crop&w=600&q=80", 
+            "description": "A pack of four eco-friendly bamboo toothbrushes for daily oral care."
+        },
+        {
+            "id": 8, 
+            "name": "Neem & Bamboo Grooming Comb Set", 
+            "category": "care", 
+            "price": 249, 
+            "image": "https://images.unsplash.com/photo-1590159763121-7c9ff3121ef0?auto=format&fit=crop&w=600&q=80", 
+            "description": "A natural neem and bamboo comb set for daily hair grooming."
+        },
+        {
+            "id": 9, 
+            "name": "Handwoven Bamboo Lamp Shade", 
+            "category": "decor", 
+            "price": 899, 
+            "image": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80", 
+            "description": "A handwoven bamboo lamp shade adding warmth and natural texture."
+        },
+        {
+            "id": 10, 
+            "name": "Handcrafted Bamboo Storage Basket", 
+            "category": "decor", 
+            "price": 649, 
+            "image": "https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=600&q=80", 
+            "description": "A woven bamboo storage basket for home organization."
+        },
+        {
+            "id": 11, 
+            "name": "Bamboo Cooking Utensils Set of 6", 
+            "category": "kitchen", 
+            "price": 499, 
+            "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80", 
+            "description": "A set of six lightweight bamboo cooking spoons and utensils."
+        },
+        {
+            "id": 12, 
+            "name": "Clay Cooking Handi Pot", 
+            "category": "kitchen", 
+            "price": 549, 
+            "image": "https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=600&q=80", 
+            "description": "A traditional clay cooking pot for rustic home meals."
+        }
     ]
 
 # --- Customer Authentication & Account APIs ---
 @app.post("/api/customer/register")
 async def customer_register(data: CustomerRegisterSchema):
     fake_db["pending_customer"] = data.dict()
-    fake_db["otp_store"][data.phone] = "123456"  # Demo OTP
+    fake_db["otp_store"][data.phone] = "123456"
     return {"status": "success", "message": "OTP sent to your phone successfully! (Demo OTP: 123456)"}
 
 @app.post("/api/customer/verify-otp")
@@ -159,7 +243,7 @@ async def checkout(order: OrderCreate):
         "total": order.total_amount,
         "address": f"{order.address}, {order.city} - {order.pincode}",
         "items": [{"quantity": i.qty, "name": i.name} for i in order.items],
-        "created_at": "2026-06-06T12:00:00"
+        "created_at": "2026-10-20T12:00:00"
     }
     fake_db["orders"].append(order_obj)
     if order.phone:
