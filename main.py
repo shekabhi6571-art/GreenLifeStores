@@ -145,6 +145,10 @@ async def serve_products():
 async def serve_account():
     return FileResponse("account.html")
 
+@app.get("/orders.html")
+async def serve_orders():
+    return FileResponse("orders.html")
+
 @app.get("/about.html")
 async def serve_about():
     return FileResponse("about.html")
