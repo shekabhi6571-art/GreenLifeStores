@@ -66,9 +66,13 @@
                     <p class="text-lg font-bold text-green-700">Total Payable Amount: <span id="checkout-total">₹0</span></p>
                 </div>
 
-                <button type="submit" class="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition shadow-md">
+                <button id="place-order-button" type="submit" disabled class="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition shadow-md disabled:cursor-not-allowed disabled:opacity-50">
                     Place Order (Cash on Delivery)
                 </button>
+                <div id="empty-cart-action" class="hidden text-center text-sm text-gray-600">
+                    Add products to your cart before checking out.
+                    <a href="products.html" class="font-semibold text-green-700 underline hover:text-green-800">Go to Shop</a>
+                </div>
             </form>
         </div>
 
@@ -80,31 +84,79 @@
     </main>
 
     <script>
-        const cart = JSON.parse(localStorage.getItem("greenlife_cart")) || [];
+        let cart = [];
+        let cartReadError = null;
+
+        function readCart() {
+            cartReadError = null;
+            try {
+                const storedCart = localStorage.getItem("greenlife_cart");
+                const parsedCart = storedCart ? JSON.parse(storedCart) : [];
+                if (!Array.isArray(parsedCart)) {
+                    throw new TypeError("Saved cart is not in the expected format.");
+                }
+                if (parsedCart.some(item =>
+                    !item ||
+                    !Number.isFinite(Number(item.price)) ||
+                    Number(item.price) < 0 ||
+                    !Number.isInteger(Number(item.qty)) ||
+                    Number(item.qty) < 1
+                )) {
+                    throw new TypeError("One or more saved cart items are invalid.");
+                }
+                cart = parsedCart;
+            } catch (error) {
+                cart = [];
+                cartReadError = error;
+                console.error("Unable to read saved cart:", error);
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
 
         function renderCheckoutSummary() {
             const listElem = document.getElementById('checkout-items-list');
             const totalElem = document.getElementById('checkout-total');
+            const placeOrderButton = document.getElementById('place-order-button');
+            const emptyCartAction = document.getElementById('empty-cart-action');
+
+            readCart();
 
             if (cart.length === 0) {
-                listElem.innerHTML = `<span class="text-red-500 font-semibold">Your cart is empty. Please add products from shop page.</span>`;
+                listElem.innerHTML = cartReadError
+                    ? `<span class="text-red-500 font-semibold">Your saved cart could not be read. Please check your cart and try again.</span>`
+                    : `<span class="text-gray-600">Your cart is empty.</span>`;
                 totalElem.innerText = "₹0";
+                placeOrderButton.disabled = true;
+                emptyCartAction.classList.remove('hidden');
                 return;
             }
 
             let total = 0;
             listElem.innerHTML = cart.map(item => {
-                total += item.price * item.qty;
-                return `• <strong>${item.name}</strong> x ${item.qty} (₹${item.price * item.qty})`;
+                const subtotal = Number(item.price) * Number(item.qty);
+                total += subtotal;
+                return `• <strong>${escapeHtml(item.name || 'Item')}</strong> x ${Number(item.qty)} (${new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(subtotal)})`;
             }).join('<br>');
 
-            totalElem.innerText = `₹${total}`;
+            totalElem.innerText = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(total);
+            placeOrderButton.disabled = false;
+            emptyCartAction.classList.add('hidden');
         }
 
         async function handleCheckout(event) {
             event.preventDefault();
+            renderCheckoutSummary();
             if (cart.length === 0) {
-                alert("Your cart is empty!");
+                alert(cartReadError ? "Your saved cart could not be read. Please check your cart and try again." : "Your cart is empty. Please add products before placing an order.");
                 return;
             }
 
@@ -187,6 +239,12 @@
         window.onload = () => {
             renderCheckoutSummary();
         };
+
+        window.addEventListener('storage', event => {
+            if (event.key === 'greenlife_cart') {
+                renderCheckoutSummary();
+            }
+        });
     </script>
 </body>
 </html>
